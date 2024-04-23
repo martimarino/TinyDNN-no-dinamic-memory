@@ -169,10 +169,11 @@ namespace tiny_dnn {
 
         // convenience wrapper for the function below
         template <typename E>
-        void bprop(const etl::vector<vec_t, MAX_OUTPUT_SIZE> &out,
-                   const etl::vector<vec_t, MAX_OUTPUT_SIZE> &t,
-                   const etl::vector<vec_t, MAX_OUTPUT_SIZE> &t_cost) {
-            bprop<E>(etl::vector<tensor_t, MAX_OUTPUT_SIZE>{out}, etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t},
+        void bprop(const etl::vector<vec_t, MAX_TENSOR_SIZE> &out,
+                   const etl::vector<vec_t, MAX_TENSOR_SIZE> &t,
+                   const etl::vector<vec_t, MAX_TENSOR_SIZE> &t_cost) {
+            bprop<E>(etl::vector<tensor_t,MAX_OUTPUT_SIZE>{out},
+            		etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t},
                      etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t_cost});
         }
 
@@ -1178,16 +1179,16 @@ namespace tiny_dnn {
     }
 
     inline void construct_graph(network<graph> &graph,
-                                const std::vector<layer *> &inputs,
-                                const std::vector<layer *> &outputs) {
+                                const etl::vector<layer *, MAX_LAYERS> &inputs,
+                                const etl::vector<layer *, MAX_LAYERS> &outputs) {
         graph.net_.construct(inputs, outputs);
     }
 
     inline void construct_graph(
             network<graph> &graph,
-            const std::vector<std::shared_ptr<layer>> &inputs,
-            const std::vector<std::shared_ptr<layer>> &outputs) {
-        std::vector<layer *> in_ptr, out_ptr;
+            const etl::vector<std::shared_ptr<layer>, MAX_INPUT_SIZE> &inputs,
+            const etl::vector<std::shared_ptr<layer>, MAX_OUTPUT_SIZE> &outputs) {
+        etl::vector<layer *, MAX_LAYERS> in_ptr, out_ptr;
         auto shared2ptr = [](std::shared_ptr<layer> l) { return l.get(); };
 
         std::transform(inputs.begin(), inputs.end(), std::back_inserter(in_ptr),

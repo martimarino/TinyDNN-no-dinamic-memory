@@ -14,7 +14,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-
 #include "tiny_dnn/config.h"
 #include "tiny_dnn/util/aligned_allocator.h"
 #include "tiny_dnn/util/nn_error.h"

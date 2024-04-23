@@ -18,7 +18,7 @@
 
 #include "interface/cereal/posit.h"
 #endif
-
+#define CNN_SINGLE_THREAD
 #ifdef CNN_USE_BFLOAT8
 #include "interface/cereal/bf16.h"
 #undef CNN_USE_AVX

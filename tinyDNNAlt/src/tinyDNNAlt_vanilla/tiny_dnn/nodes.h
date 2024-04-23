@@ -21,6 +21,8 @@
 #include "tiny_dnn/layers/layer.h"
 #include "tiny_dnn/optimizers/optimizer.h"
 #include "tiny_dnn/util/util.h"
+#include "tiny_dnn/util/parameters.h"
+
 
 namespace cereal {
 
@@ -88,14 +90,14 @@ namespace tiny_dnn {
          * @param first        : gradient of cost function(dE/dy)
          * @param worker_index : id of worker-task
          **/
-        virtual void backward(const etl::vector<tensor_t, 3> &first) = 0;
+        virtual void backward(const etl::vector<tensor_t, MAX_SAMPLES> &first) = 0;
 
         /**
          * @param first input  : data vectors
          * @param worker_index : id of worker-task
          **/
-        virtual etl::vector<tensor_t, 3> forward(
-                const etl::vector<tensor_t, MAX_INPUT_SIZE> &first) = 0;  // NOLINT
+        virtual etl::vector<tensor_t, MAX_CHANNEL_SIZE> forward(
+                const etl::vector<tensor_t, MAX_SAMPLES> &first) = 0;  // NOLINT
 
         /**
          * update weights and clear all gradients
@@ -169,7 +171,7 @@ namespace tiny_dnn {
             }
         }
 
-        virtual void load(const std::vector<float_t> &vec) {
+        virtual void load(const etl::vector<float_t, MAX_NODES> &vec) { /// ????
             int idx = 0;
             setup(false);
             for (auto &l : nodes_) {
@@ -177,7 +179,7 @@ namespace tiny_dnn {
             }
         }
 
-        void label2vec(const label_t *t, size_t num, etl::vector<vec_t, num> &vec) const {
+        void label2vec(const label_t *t, size_t num, etl::vector<vec_t, MAX_LABEL_SIZE> &vec) const {
             size_t outdim = out_data_size();
 
             vec.reserve(num);
@@ -231,8 +233,8 @@ namespace tiny_dnn {
         // input:  [sample][channel][feature]
         // output: [channel][sample][feature]
         void reorder_for_layerwise_processing(
-                const std::vector<tensor_t> &input,
-                std::vector<std::vector<const vec_t *, MAX_OUTPUT_SIZE>, 3> &output) {
+                const etl::vector<tensor_t, MAX_SAMPLES> &input,
+                etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> &output) { //output matrice con colonne pari ai canali e colonne pari ai sample
             size_t sample_count  = input.size();
             size_t channel_count = input[0].size();
 
@@ -263,9 +265,9 @@ namespace tiny_dnn {
         }
 
         /* Nodes which this class has ownership */
-        std::vector<std::shared_ptr<layer>> own_nodes_;
+        etl::vector<std::shared_ptr<layer>, MAX_NODES> own_nodes_;
         /* List of all nodes which includes own_nodes */
-        std::vector<layer *> nodes_;
+        etl::vector<layer *, MAX_NODES> nodes_;
     };
 
 /**
@@ -273,8 +275,8 @@ namespace tiny_dnn {
  **/
     class sequential : public nodes {
     public:
-        void backward(const std::vector<tensor_t> &first) override {
-            std::vector<std::vector<const vec_t *>> reordered_grad;
+        void backward(const etl::vector<tensor_t, MAX_SAMPLES> &first) override {
+            etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> reordered_grad;
             reorder_for_layerwise_processing(first, reordered_grad);
             assert(reordered_grad.size() == 1);
 
@@ -285,8 +287,8 @@ namespace tiny_dnn {
             }
         }
 
-        std::vector<tensor_t> forward(const std::vector<tensor_t> &first) override {
-            std::vector<std::vector<const vec_t *>> reordered_data;
+        etl::vector<tensor_t, MAX_CHANNEL_SIZE> forward(const etl::vector<tensor_t, MAX_SAMPLES> &first) override {
+            etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> reordered_data;
             reorder_for_layerwise_processing(first, reordered_data);
             assert(reordered_data.size() == 1);
 
@@ -296,7 +298,7 @@ namespace tiny_dnn {
                 l->forward();
             }
 
-            std::vector<const tensor_t *> out;
+            etl::vector<const tensor_t *, MAX_CHANNEL_SIZE> out;
             nodes_.back()->output(out);
 
             return normalize_out(out);
@@ -343,10 +345,10 @@ namespace tiny_dnn {
     private:
         friend class nodes;
 
-        std::vector<tensor_t> normalize_out(
-                const std::vector<const tensor_t *> &out) {
+        etl::vector<tensor_t, MAX_CHANNEL_SIZE> normalize_out(
+                const etl::vector<const tensor_t *, MAX_CHANNEL_SIZE> &out) {
             // normalize indexing back to [sample][layer][feature]
-            std::vector<tensor_t> normalized_output;
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> normalized_output;
 
             const size_t sample_count = out[0]->size();
             normalized_output.resize(sample_count, tensor_t(1));
@@ -365,14 +367,14 @@ namespace tiny_dnn {
  **/
     class graph : public nodes {
     public:
-        void backward(const std::vector<tensor_t> &out_grad) override {
+        void backward(const etl::vector<tensor_t, MAX_SAMPLES> &out_grad) override {
             size_t output_channel_count = out_grad[0].size();
 
             if (output_channel_count != output_layers_.size()) {
                 throw nn_error("input size mismatch");
             }
 
-            std::vector<std::vector<const vec_t *>> reordered_grad;
+            etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> reordered_grad;
             reorder_for_layerwise_processing(out_grad, reordered_grad);
             assert(reordered_grad.size() == output_channel_count);
 
@@ -385,14 +387,14 @@ namespace tiny_dnn {
             }
         }
 
-        std::vector<tensor_t> forward(const std::vector<tensor_t> &in_data) override {
+        etl::vector<tensor_t, MAX_CHANNEL_SIZE> forward(const etl::vector<tensor_t, MAX_SAMPLES> &in_data) override {
             size_t input_data_channel_count = in_data[0].size();
 
             if (input_data_channel_count != input_layers_.size()) {
                 throw nn_error("input size mismatch");
             }
 
-            std::vector<std::vector<const vec_t *>> reordered_data;
+            etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> reordered_data;
             reorder_for_layerwise_processing(in_data, reordered_data);
             assert(reordered_data.size() == input_data_channel_count);
 
@@ -408,11 +410,11 @@ namespace tiny_dnn {
             return merge_outs();
         }
 
-        void construct(const std::vector<layer *> &input,
-                       const std::vector<layer *> &output) {
-            std::vector<layer *> sorted;
-            std::vector<node *> input_nodes(input.begin(), input.end());
-            std::unordered_map<node *, std::vector<uint8_t>> removed_edge;
+        void construct(const etl::vector<layer *, MAX_LAYERS> &input,
+                       const etl::vector<layer *, MAX_LAYERS> &output) {
+            etl::vector<layer *, MAX_LAYERS> sorted;
+            etl::vector<node *, MAX_NODES> input_nodes(input.begin(), input.end());
+            std::unordered_map<node *, etl::vector<uint8_t, MAX_NODES>> removed_edge;
 
             // topological-sorting
             while (!input_nodes.empty()) {
@@ -420,17 +422,17 @@ namespace tiny_dnn {
                 input_nodes.pop_back();
 
                 layer *curr              = sorted.back();
-                std::vector<node *> next = curr->next_nodes();
+                etl::vector<node *, MAX_NODES> next = curr->next_nodes();
 
                 for (size_t i = 0; i < next.size(); i++) {
                     if (!next[i]) continue;
                     // remove edge between next[i] and current
                     if (removed_edge.find(next[i]) == removed_edge.end()) {
                         removed_edge[next[i]] =
-                                std::vector<uint8_t>(next[i]->prev_nodes().size(), 0);
+                                etl::vector<uint8_t, MAX_NODES>(next[i]->prev_nodes().size(), 0);
                     }
 
-                    std::vector<uint8_t> &removed = removed_edge[next[i]];
+                    etl::vector<uint8_t, MAX_NODES> &removed = removed_edge[next[i]];
                     removed[find_index(next[i]->prev_nodes(), curr)] = 1;
 
                     if (std::all_of(removed.begin(), removed.end(),
@@ -481,8 +483,8 @@ namespace tiny_dnn {
 #endif  // CNN_NO_SERIALIZATION
             }
 
-            std::vector<std::tuple<size_t, size_t, size_t, size_t>> connections;
-            std::vector<size_t> in_nodes, out_nodes;
+            etl::vector<std::tuple<size_t, size_t, size_t, size_t>, MAX_CONNECTIONS> connections;
+            etl::vector<size_t, MAX_NODES> in_nodes, out_nodes;
         };
 
         template <typename OutputArchive>
@@ -545,9 +547,9 @@ namespace tiny_dnn {
         }
 
         // normalize indexing back to [sample][layer][feature]
-        std::vector<tensor_t> merge_outs() {
-            std::vector<tensor_t> merged;
-            std::vector<const tensor_t *> out;
+        etl::vector<tensor_t, MAX_CHANNEL_SIZE> merge_outs() {
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> merged;
+            etl::vector<const tensor_t *, MAX_CHANNEL_SIZE> out;
             size_t output_channel_count = output_layers_.size();
             for (size_t output_channel = 0; output_channel < output_channel_count;
                  ++output_channel) {
@@ -568,14 +570,14 @@ namespace tiny_dnn {
             return merged;
         }
 
-        size_t find_index(const std::vector<node *> &nodes, layer *target) {
+        size_t find_index(const etl::vector<node *, MAX_NODES> &nodes, layer *target) {
             for (size_t i = 0; i < nodes.size(); i++) {
                 if (nodes[i] == static_cast<node *>(&*target)) return i;
             }
             throw nn_error("invalid connection");
         }
-        std::vector<layer *> input_layers_;
-        std::vector<layer *> output_layers_;
+        etl::vector<layer *, MAX_LAYERS> input_layers_;
+        etl::vector<layer *, MAX_LAYERS> output_layers_;
     };
 
     template <typename OutputArchive>
