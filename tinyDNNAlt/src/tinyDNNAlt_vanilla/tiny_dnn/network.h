@@ -22,6 +22,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <thread>
 
 #include "tiny_dnn/lossfunctions/loss_function.h"
 #include "tiny_dnn/nodes.h"
@@ -169,17 +170,17 @@ namespace tiny_dnn {
         // convenience wrapper for the function below
         template <typename E>
         void bprop(const etl::vector<vec_t, MAX_OUTPUT_SIZE> &out,
-                   const etl::vector<vec_t, MAX_LABEL_SIZE> &t,
-                   const etl::vector<vec_t, MAX_LABEL_SIZE> &t_cost) {
-            bprop<E>(etl::vector<tensor_t, MAX_OUTPUT_SIZE>{out}, etl::vector<tensor_t, MAX_LABEL_SIZE>{t},
-                     etl::vector<tensor_t, MAX_LABEL_SIZE>{t_cost});
+                   const etl::vector<vec_t, MAX_OUTPUT_SIZE> &t,
+                   const etl::vector<vec_t, MAX_OUTPUT_SIZE> &t_cost) {
+            bprop<E>(etl::vector<tensor_t, MAX_OUTPUT_SIZE>{out}, etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t},
+                     etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t_cost});
         }
 
         template <typename E>
         void bprop(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &out,
-                   const etl::vector<tensor_t, MAX_LABEL_SIZE> &t,
-                   const etl::vector<tensor_t, MAX_LABEL_SIZE> &t_cost) {
-            etl::vector<tensor_t, MAX_LABEL_SIZE> delta = gradient<E>(out, t, t_cost);
+                   const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t,
+                   const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t_cost) {
+            etl::vector<tensor_t, MAX_OUTPUT_SIZE> delta = gradient<E>(out, t, t_cost);
             net_.backward(delta);
         }
 
@@ -190,14 +191,14 @@ namespace tiny_dnn {
 #else
             // a workaround to reduce memory consumption by skipping wrapper
             // function
-            std::vector<tensor_t> a(1);
+            etl::vector<tensor_t, 1> a(1);
             a[0].emplace_back(in);
             return fprop(a)[0][0];
 #endif
         }
 
         // convenience wrapper for the function below
-        std::vector<vec_t> fprop(const etl::vector<vec_t, MAX_INPUT_SIZE> &in) {
+        etl::vector<vec_t, MAX_INPUT_SIZE> fprop(const etl::vector<vec_t, MAX_INPUT_SIZE> &in) {
             return fprop(etl::vector<tensor_t, MAX_INPUT_SIZE>{in})[0];
         }
 
@@ -284,7 +285,7 @@ namespace tiny_dnn {
                 typename OnBatchEnumerate,
                 typename OnEpochEnumerate>
         bool train(Optimizer &optimizer,
-                   const std::vector<vec_t> &inputs,
+                   const etl::vector<vec_t, MAX_INPUT_SIZE> &inputs,
                    const std::vector<label_t> &class_labels,
                    size_t batch_size,
                    int epoch,
@@ -292,7 +293,7 @@ namespace tiny_dnn {
                    OnEpochEnumerate on_epoch_enumerate,
                    const bool reset_weights         = false,
                    const int n_threads              = CNN_TASK_SIZE,
-                   const etl::vector<vec_t> &t_cost = etl::vector<vec_t>()) {
+                   const etl::vector<vec_t, MAX_OUTPUT_SIZE> &t_cost = etl::vector<vec_t, MAX_OUTPUT_SIZE>()) {
             if (inputs.size() != class_labels.size()) {
                 return false;
             }

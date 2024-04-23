@@ -8,6 +8,9 @@
 #pragma once
 
 
+#define CNN_NO_SERIALIZATION
+#include "etl/vector.h"
+#include "tiny_dnn/util/parameters.h"
 
 #include "tiny_dnn/config.h"
 #include "tiny_dnn/network.h"
