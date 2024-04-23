@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C9AC6123-7193-365D-B4E2-402ABD4A6136}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>mnist_tests_type</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\cppposit_private\include;C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\bfloat8\include;C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\cppposit_private\include\tabulated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\cppposit_private\include;C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\bfloat8\include;C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\cppposit_private\include\tabulated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\cppposit_private\include;C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\bfloat8\include;C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\cppposit_private\include\tabulated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\cppposit_private\include;C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\bfloat8\include;C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\..\..\..\..\cppposit_private\include\tabulated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla/examples/mnist/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -SC:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla -BC:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla --check-stamp-file C:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla/examples/mnist/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla/examples/mnist/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -SC:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla -BC:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla --check-stamp-file C:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla/examples/mnist/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla/examples/mnist/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -SC:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla -BC:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla --check-stamp-file C:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla/examples/mnist/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla/examples/mnist/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -SC:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla -BC:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla --check-stamp-file C:/Users/marti/AppData/Roaming/Xilinx/Vitis/tiny_dnn/tinyDNNAlt_vanilla/examples/mnist/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\ZERO_CHECK.vcxproj">
+      <Project>{654978FF-3692-3B76-A544-517A1DC24EE8}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test.vcxproj">
+      <Project>{88EF179D-B42E-33CE-934D-822BA1007B51}</Project>
+      <Name>mnist_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test_b16.vcxproj">
+      <Project>{FEC468B1-1277-3249-B29A-58D9793F38B3}</Project>
+      <Name>mnist_test_b16</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test_b8.vcxproj">
+      <Project>{27DA9067-642B-34F7-A895-2724F7D97E92}</Project>
+      <Name>mnist_test_b8</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test_p10_0.vcxproj">
+      <Project>{9F099B83-A6DA-38E1-9AD3-01B09BFDC025}</Project>
+      <Name>mnist_test_p10_0</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test_p12_0.vcxproj">
+      <Project>{8DECECE4-0C13-3CA2-A507-3B4ADDE27880}</Project>
+      <Name>mnist_test_p12_0</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test_p14_0.vcxproj">
+      <Project>{1B165448-527C-376E-8E04-262FE7BBF708}</Project>
+      <Name>mnist_test_p14_0</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test_p16_0.vcxproj">
+      <Project>{5881D599-E435-3AB0-A460-6D4C2842A5A5}</Project>
+      <Name>mnist_test_p16_0</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test_p16_1.vcxproj">
+      <Project>{B883E568-F0C2-30BD-9797-A6D97B5B8D3C}</Project>
+      <Name>mnist_test_p16_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\examples\mnist\mnist_test_p8_0.vcxproj">
+      <Project>{A1C166B7-496D-3218-AB0C-D8282C42D1B1}</Project>
+      <Name>mnist_test_p8_0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

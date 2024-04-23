@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\marti\AppData\Roaming\Xilinx\Vitis\tiny_dnn\tinyDNNAlt_vanilla\CMakeFiles\690f95ffcc4a29e0cf867d3d8e513839\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{C5656221-0DC3-3C7D-9212-DDC983114F70}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

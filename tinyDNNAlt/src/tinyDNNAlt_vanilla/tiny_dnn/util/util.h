@@ -141,9 +141,9 @@ typedef size_t label_t;
 
 typedef size_t layer_size_t;  // for backward compatibility
 
-typedef std::vector<float_t, aligned_allocator<float_t, 64>> vec_t;
+typedef etl::vector<float_t, MAX_WEIGTHS_SIZE> vec_t;
 
-typedef std::vector<vec_t> tensor_t;
+typedef etl::vector<vec_t, MAX_TENSOR_SIZE> tensor_t;
 
 template <typename T>
 using xtensor_t = xt::xexpression<T>;
