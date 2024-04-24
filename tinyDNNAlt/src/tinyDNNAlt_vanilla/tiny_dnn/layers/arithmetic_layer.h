@@ -26,18 +26,18 @@ class elementwise_add_layer : public layer {
    * @param dim      [in] number of elements for each input
    */
   elementwise_add_layer(size_t num_args, size_t dim)
-    : layer(etl::vector<vector_type, MAX_INPUT_SIZE>(num_args, vector_type::data),
+    : layer(std::vector<vector_type>(num_args, vector_type::data),
             {vector_type::data}),
       num_args_(num_args),
       dim_(dim) {}
 
   std::string layer_type() const override { return "elementwise-add"; }
 
-  etl::vector<shape3d, MAX_VSIZE> in_shape() const override {
-    return etl::vector<shape3d, MAX_INPUT_SIZE>(num_args_, shape3d(dim_, 1, 1));
+  std::vector<shape3d> in_shape() const override {
+    return std::vector<shape3d>(num_args_, shape3d(dim_, 1, 1));
   }
 
-  etl::vector<shape3d, MAX_VSIZE> out_shape() const override {
+  std::vector<shape3d> out_shape() const override {
     return {shape3d(dim_, 1, 1)};
   }
 

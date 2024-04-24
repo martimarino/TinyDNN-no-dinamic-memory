@@ -202,7 +202,7 @@ class batch_normalization_layer : public layer {
 	}
   }
 
-  void load(const etl::vector<float_t, MAX_NODES> &src, int &idx) override {
+  void load(const std::vector<float_t> &src, int &idx) override {
     Base::load(src, idx);
     for (auto &m : mean_) m     = src[idx++];
     for (auto &v : variance_) v = src[idx++];

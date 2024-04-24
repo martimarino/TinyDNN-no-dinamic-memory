@@ -60,8 +60,8 @@ class layer : public node {
    * @param out_type[M] type of output vector
    *
    **/
-  layer(const etl::vector<vector_type, MAX_INPUT_SIZE> &in_type,
-        const etl::vector<vector_type, MAX_OUTPUT_SIZE> &out_type)
+  layer(const std::vector<vector_type> &in_type,
+        const std::vector<vector_type> &out_type)
     : node(in_type.size(), out_type.size()),
       initialized_(false),
       parallelize_(true),
@@ -138,16 +138,16 @@ class layer : public node {
                  [](const shape3d &s) { return s.size(); });
   }
 
-  etl::vector<shape3d, MAX_VSIZE> in_data_shape() {  // shape for each input data
+  std::vector<shape3d> in_data_shape() {
     return filter(in_shape(), [&](size_t i) {  // NOLINT
       return in_type_[i] == vector_type::data;
-    }, MAX_INPUT_SIZE);
+    });
   }
 
-  etl::vector<shape3d, MAX_VSIZE> out_data_shape() { // shape for each output data
+  std::vector<shape3d> out_data_shape() {
     return filter(out_shape(), [&](size_t i) {  // NOLINT
       return out_type_[i] == vector_type::data;
-    }, MAX_OUTPUT_SIZE);
+    });
   }
 
   ///! @deprecated use in_data_size() instead
@@ -156,8 +156,8 @@ class layer : public node {
   ///! @deprecated use out_data_size() instead
   size_t out_size() const { return out_data_size(); }
 
-  etl::vector<const vec_t *, MAX_CHANNEL_SIZE> weights() const {
-    etl::vector<const vec_t *, MAX_CHANNEL_SIZE> v;
+  std::vector<const vec_t *> weights() const {
+    std::vector<const vec_t *> v;
     for (size_t i = 0; i < in_channels_; i++) {
       if (is_trainable_weight(in_type_[i])) {
         v.push_back(get_weight_data(i));
@@ -166,8 +166,8 @@ class layer : public node {
     return v;
   }
 
-  etl::vector<vec_t *, MAX_CHANNEL_SIZE> weights() {
-    etl::vector<vec_t *, MAX_CHANNEL_SIZE> v;
+  std::vector<vec_t *> weights() {
+    std::vector<vec_t *> v;
     for (size_t i = 0; i < in_channels_; i++) {
       if (is_trainable_weight(in_type_[i])) {
         v.push_back(get_weight_data(i));
@@ -176,8 +176,8 @@ class layer : public node {
     return v;
   }
 
-  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> weights_grads() {
-    etl::vector<tensor_t *, MAX_CHANNEL_SIZE> v;
+  std::vector<tensor_t *> weights_grads() {
+    std::vector<tensor_t *> v;
     for (size_t i = 0; i < in_channels_; i++) {
       if (is_trainable_weight(in_type_[i])) {
         v.push_back(ith_in_node(i)->get_gradient());
@@ -186,31 +186,31 @@ class layer : public node {
     return v;
   }
 
-  etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> inputs() {
-    etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> nodes(in_channels_);
+  std::vector<edgeptr_t> inputs() {
+    std::vector<edgeptr_t> nodes(in_channels_);
     for (size_t i = 0; i < in_channels_; i++) {
       nodes[i] = ith_in_node(i);
     }
     return nodes;
   }
 
-  etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> outputs() { // assumes nr channels output at most those in input
-    etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> nodes(out_channels_);
+  std::vector<edgeptr_t> outputs() {
+    std::vector<edgeptr_t> nodes(out_channels_);
     for (size_t i = 0; i < out_channels_; i++) {
       nodes[i] = ith_out_node(i);
     }
     return nodes;
   }
 
-  etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> outputs() const {
-    etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> nodes(out_channels_);
+  std::vector<edgeptr_t> outputs() const {
+    std::vector<edgeptr_t> nodes(out_channels_);
     for (size_t i = 0; i < out_channels_; i++) {
       nodes[i] = const_cast<layer *>(this)->ith_out_node(i);
     }
     return nodes;
   }
 
-  void set_out_grads(const etl::vector<const vec_t *, MAX_SAMPLES> *grad, size_t cnt) {  /// ! da ricontrollare
+  void set_out_grads(const std::vector<const vec_t *> *grad, size_t cnt) {
     CNN_UNREFERENCED_PARAMETER(cnt);
     size_t n = 0;
     for (size_t i = 0; i < out_channels_; i++) {
@@ -227,7 +227,7 @@ class layer : public node {
     }
   }
 
-  void set_in_data(const etl::vector<const vec_t *, MAX_SAMPLES> *data, size_t cnt) {
+  void set_in_data(const std::vector<const vec_t *> *data, size_t cnt) {
     CNN_UNREFERENCED_PARAMETER(cnt);
     size_t n = 0;
     for (size_t i = 0; i < in_channels_; i++) {
@@ -250,7 +250,7 @@ class layer : public node {
     }
   }
 
-  void output(etl::vector<const tensor_t *, MAX_CHANNEL_SIZE> &out) const {
+  void output(std::vector<const tensor_t *> &out) const {
     out.clear();
     for (size_t i = 0; i < out_channels_; i++) {
       if (out_type_[i] == vector_type::data) {
@@ -258,7 +258,7 @@ class layer : public node {
       }
     }
   }
-
+  
   etl::vector<vector_type, MAX_VSIZE> in_types() const { return in_type_; }
 
   etl::vector<vector_type, MAX_VSIZE> out_types() const { return out_type_; }
@@ -280,7 +280,7 @@ class layer : public node {
   /**
    * array of input shapes (width x height x depth)
    **/
-  virtual etl::vector<shape3d, MAX_VSIZE> in_shape() const = 0;
+  virtual std::vector<shape3d> in_shape() const = 0;
 
   /**
    * set input shape of a layer (only used internally while shape inferring)
@@ -295,7 +295,7 @@ class layer : public node {
   /**
    * array of output shapes (width x height x depth)
    **/
-  virtual etl::vector<shape3d, MAX_VSIZE> out_shape() const = 0;
+  virtual std::vector<shape3d> out_shape() const = 0;
 
   /**
    * name of layer, should be unique for each concrete class
@@ -389,7 +389,7 @@ class layer : public node {
     initialized_ = true;
   }
 
-  virtual void load(const etl::vector<float_t, MAX_NODES> &src, int &idx) {  // NOLINT
+  virtual void load(const std::vector<float_t> &src, int &idx) {  // NOLINT
     auto all_weights = weights();
     for (auto &weight : all_weights) {
       for (auto &w : *weight) w = src[idx++];
@@ -466,13 +466,13 @@ class layer : public node {
    * graph. Will be this overhead reduced once we have the Tensor
    * class integrated?
    */
-  void forward(const etl::vector<tensor_t, MAX_SAMPLES> &input,
-               etl::vector<const tensor_t *, MAX_CHANNEL_SIZE> &out) {  // for test
+  void forward(const std::vector<tensor_t> &input,
+               std::vector<const tensor_t *> &out) {  // for test
     // allocate data in the computational graph without
     // resetting the weights.
     setup(false);
 
-    etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> input2;
+    std::vector<std::vector<const vec_t *>> input2;
     input2.resize(input.size());
     for (size_t i = 0; i < input.size(); ++i) {
       input2[i].resize(input[i].size());
@@ -490,11 +490,11 @@ class layer : public node {
     output(out);
   }
 
-  etl::vector<tensor_t, MAX_CHANNEL_SIZE> backward(
-    const etl::vector<tensor_t, MAX_CONNECTIONS> &out_grads) {  // for test
+  std::vector<tensor_t> backward(
+    const std::vector<tensor_t> &out_grads) {  // for test
     setup(false);
 
-    etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> grads2;
+    std::vector<std::vector<const vec_t *>> grads2;
     grads2.resize(out_grads.size());
     for (size_t i = 0; i < out_grads.size(); ++i) {
       grads2[i].resize(out_grads[i].size());
@@ -745,9 +745,9 @@ class layer : public node {
   /** The number of output vectors/edges */
   size_t out_channels_;
   /** Vector containing the type of data for inputs */
-  etl::vector<vector_type, MAX_INPUT_SIZE> in_type_;
+  std::vector<vector_type> in_type_;
   /** Vector containing the type of data for outputs */
-  etl::vector<vector_type, MAX_OUTPUT_SIZE> out_type_;
+  std::vector<vector_type> out_type_;
   /** The current backend type for operations */
   core::backend_t backend_type_;
   /** The backend instance (deprecated) */
@@ -789,7 +789,7 @@ class layer : public node {
    * Graphical explanation:
    *
    *     nullptr -- |edge| -- prev(i) ---- |layer|
-   *               nullptr -- prev(i+1) -´
+   *               nullptr -- prev(i+1) -Â´
    */
   void alloc_input(size_t i) const {
     // the created incoming edge won't have a previous connection,
@@ -912,22 +912,6 @@ std::basic_istream<Char, CharTraits> &operator>>(
   v.load(os);
   return os;
 }
-
-// Ridefinizione dell'operatore << per etl::vector<shape3d, INPUT>
-std::ostream &operator<<(std::ostream &s, const etl::vector<shape3d, MAX_INPUT_SIZE> &vec) {
-    for (const auto& shape : vec) {
-        s << shape << " "; // Utilizza l'operatore << definito per index3d
-    }
-    return s;
-}
-// Ridefinizione dell'operatore << per etl::vector<shape3d, OUTPUT>
-std::ostream &operator<<(std::ostream &s, const etl::vector<shape3d, MAX_OUTPUT_SIZE> &vec) {
-    for (const auto& shape : vec) {
-        s << shape << " "; // Utilizza l'operatore << definito per index3d
-    }
-    return s;
-}
-
 
 // error message functions
 
