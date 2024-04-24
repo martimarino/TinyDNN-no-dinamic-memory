@@ -43,8 +43,6 @@
 #include "tiny_dnn/util/parallel_for.h"
 #include "tiny_dnn/util/product.h"
 #include "tiny_dnn/util/random.h"
-#include "tiny_dnn/util/parameters.h"
-#include "etl/vector.h"
 
 #if defined(USE_OPENCL) || defined(USE_CUDA)
 #ifdef USE_OPENCL
@@ -143,8 +141,9 @@ typedef size_t label_t;
 
 typedef size_t layer_size_t;  // for backward compatibility
 
-typedef etl::vector<float_t, MAX_WEIGTHS_SIZE> vec_t;
-typedef etl::vector<vec_t, MAX_TENSOR_SIZE> tensor_t;
+typedef std::vector<float_t, aligned_allocator<float_t, 64>> vec_t;
+
+typedef std::vector<vec_t> tensor_t;
 
 template <typename T>
 using xtensor_t = xt::xexpression<T>;
@@ -325,7 +324,7 @@ void CNN_LOG_VECTOR(const vec_t& vec, const std::string& name) {
 */
 
 template <typename T, typename Pred, typename Sum>
-size_t sumif(const etl::vector<T, MAX_INPUT_SIZE> &vec, Pred p, Sum s) {
+size_t sumif(const std::vector<T> &vec, Pred p, Sum s) {
   size_t sum = 0;
   for (size_t i = 0; i < vec.size(); i++) {
     if (p(i)) sum += s(vec[i]);
@@ -334,17 +333,17 @@ size_t sumif(const etl::vector<T, MAX_INPUT_SIZE> &vec, Pred p, Sum s) {
 }
 
 template <typename T, typename Pred>
-etl::vector<T, MAX_VSIZE> filter(const etl::vector<T, MAX_VSIZE> &vec, Pred p, size_t size) {
-  etl::vector<T, MAX_VSIZE> res;
-  for (size_t i = 0; i < size; i++) {
+std::vector<T> filter(const std::vector<T> &vec, Pred p) {
+  std::vector<T> res;
+  for (size_t i = 0; i < vec.size(); i++) {
     if (p(i)) res.push_back(vec[i]);
   }
   return res;
 }
 
 template <typename Result, typename T, typename Pred>
-etl::vector<Result, MAX_CHANNEL_SIZE> map_(const etl::vector<T, MAX_CHANNEL_SIZE> &vec, Pred p) {
-  etl::vector<Result, MAX_CHANNEL_SIZE> res(vec.size());
+std::vector<Result> map_(const std::vector<T> &vec, Pred p) {
+  std::vector<Result> res(vec.size());
   for (size_t i = 0; i < vec.size(); ++i) {
     res[i] = p(vec[i]);
   }
