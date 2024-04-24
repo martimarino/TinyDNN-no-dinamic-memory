@@ -258,10 +258,10 @@ class layer : public node {
       }
     }
   }
+  
+  etl::vector<vector_type, MAX_VSIZE> in_types() const { return in_type_; }
 
-  std::vector<vector_type> in_types() const { return in_type_; }
-
-  std::vector<vector_type> out_types() const { return out_type_; }
+  etl::vector<vector_type, MAX_VSIZE> out_types() const { return out_type_; }
 
   void set_trainable(bool trainable) { trainable_ = trainable; }
 

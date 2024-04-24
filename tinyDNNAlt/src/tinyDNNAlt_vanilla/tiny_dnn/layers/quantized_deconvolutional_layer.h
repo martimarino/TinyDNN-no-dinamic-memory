@@ -261,7 +261,7 @@ class quantized_deconvolutional_layer : public layer {
     layer::backend_->deconv2d_q(in_data, out_data, out_grad, in_grad);
   }
 
-  std::vector<index3d<size_t>> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
     if (params_.has_bias) {
       return {params_.in, params_.weight,
               index3d<size_t>(1, 1, params_.out.depth_)};
@@ -270,7 +270,7 @@ class quantized_deconvolutional_layer : public layer {
     }
   }
 
-  std::vector<index3d<size_t>> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override {
     return {params_.out_unpadded};
   }
 

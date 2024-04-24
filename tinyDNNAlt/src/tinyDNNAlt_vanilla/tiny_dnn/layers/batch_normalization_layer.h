@@ -79,11 +79,11 @@ class batch_normalization_layer : public layer {
   ///< number of outgoing connections for each input unit
   size_t fan_out_size() const override { return 1; }
 
-  std::vector<index3d<size_t>> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
     return {index3d<size_t>(in_spatial_size_, 1, in_channels_)};
   }
 
-  std::vector<index3d<size_t>> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override {
     return {index3d<size_t>(in_spatial_size_, 1, in_channels_)};
   }
 

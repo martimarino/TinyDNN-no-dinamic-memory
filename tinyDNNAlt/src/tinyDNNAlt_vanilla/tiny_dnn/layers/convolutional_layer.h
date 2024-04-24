@@ -342,7 +342,7 @@ class convolutional_layer : public layer {
                                    vec_t(params_.in_padded.size(), float_t(0)));
   }
 
-  std::vector<index3d<size_t>> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
     if (params_.has_bias) {
       return {params_.in, params_.weight,
               index3d<size_t>(1, 1, params_.out.depth_)};
@@ -351,7 +351,7 @@ class convolutional_layer : public layer {
     }
   }
 
-  std::vector<index3d<size_t>> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override {
     return {params_.out};
   }
 

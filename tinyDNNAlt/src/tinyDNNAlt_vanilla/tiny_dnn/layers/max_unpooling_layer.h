@@ -121,8 +121,8 @@ class max_unpooling_layer : public layer {
     }
   }
 
-  std::vector<index3d<size_t>> in_shape() const override { return {in_}; }
-  std::vector<index3d<size_t>> out_shape() const override { return {out_}; }
+  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override { return {in_}; }
+  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override { return {out_}; }
   std::string layer_type() const override { return "max-unpool"; }
   size_t unpool_size() const { return unpool_size_; }
 

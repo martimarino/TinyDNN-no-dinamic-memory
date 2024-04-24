@@ -163,11 +163,11 @@ class average_unpooling_layer : public partial_connected_layer {
     init_connection(pooling_size);
   }
 
-  std::vector<index3d<size_t>> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
     return {in_, w_, index3d<size_t>(1, 1, out_.depth_)};
   }
 
-  std::vector<index3d<size_t>> out_shape() const override { return {out_}; }
+  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override { return {out_}; }
 
   std::string layer_type() const override { return "ave-unpool"; }
 

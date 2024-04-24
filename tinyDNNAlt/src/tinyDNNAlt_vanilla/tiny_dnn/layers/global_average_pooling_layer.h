@@ -81,11 +81,11 @@ class global_average_pooling_layer : public layer {
     kernel_back_->compute(bwd_ctx_);
   }
 
-  std::vector<index3d<size_t>> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
     return {params_.in};
   }
 
-  std::vector<index3d<size_t>> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override {
     return {params_.out};
   }
 

@@ -74,9 +74,9 @@ class lrn_layer : public layer {
 
   size_t fan_out_size() const override { return size_; }
 
-  std::vector<shape3d> in_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_VSIZE> in_shape() const override { return {in_shape_}; }
 
-  std::vector<shape3d> out_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return {in_shape_}; }
 
   std::string layer_type() const override { return "lrn"; }
 

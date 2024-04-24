@@ -19,9 +19,9 @@ class cell : public layer {
  public:
   cell() : layer({}, {}) {}
 
-  virtual std::vector<vector_type> input_order() = 0;
+  virtual etl::vector<vector_type, MAX_INPUT_SIZE> input_order() = 0;
 
-  virtual std::vector<vector_type> output_order() = 0;
+  virtual etl::vector<vector_type, MAX_OUTPUT_SIZE> output_order() = 0;
 
   virtual void forward_propagation(const std::vector<tensor_t *> &in_data,
                                    std::vector<tensor_t *> &out_data) = 0;
