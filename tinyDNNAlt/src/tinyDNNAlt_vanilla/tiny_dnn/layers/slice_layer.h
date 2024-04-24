@@ -52,8 +52,8 @@ class slice_layer : public layer {
   slice_layer(const shape3d &in_shape,
               slice_type slice_type,
               size_t num_outputs)
-    : layer(std::vector<vector_type>(1, vector_type::data),
-            std::vector<vector_type>(num_outputs, vector_type::data)),
+    : layer(etl::vector<vector_type, MAX_INPUT_SIZE>(1, vector_type::data),
+            etl::vector<vector_type, MAX_OUTPUT_SIZE>(num_outputs, vector_type::data)),
       in_shape_(in_shape),
       slice_type_(slice_type),
       num_outputs_(num_outputs) {
@@ -63,8 +63,8 @@ class slice_layer : public layer {
   slice_layer(const layer &prev_layer,
               slice_type slice_type,
               size_t num_outputs)
-    : layer(std::vector<vector_type>(1, vector_type::data),
-            std::vector<vector_type>(num_outputs, vector_type::data)),
+    : layer(etl::vector<vector_type,  MAX_INPUT_SIZE>(1, vector_type::data),
+            etl::vector<vector_type, MAX_OUTPUT_SIZE>(num_outputs, vector_type::data)),
       in_shape_(prev_layer.out_shape()[0]),
       slice_type_(slice_type),
       num_outputs_(num_outputs) {
@@ -73,9 +73,9 @@ class slice_layer : public layer {
 
   std::string layer_type() const override { return "slice"; }
 
-  std::vector<shape3d> in_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_VSIZE> in_shape() const override { return {in_shape_}; }
 
-  std::vector<shape3d> out_shape() const override { return out_shapes_; }
+  etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return out_shapes_; }
 
   void forward_propagation(const std::vector<tensor_t *> &in_data,
                            std::vector<tensor_t *> &out_data) override {
@@ -216,7 +216,7 @@ class slice_layer : public layer {
   shape3d in_shape_;
   slice_type slice_type_;
   size_t num_outputs_;
-  std::vector<shape3d> out_shapes_;
+  etl::vector<shape3d, MAX_VSIZE> out_shapes_;
   std::vector<size_t> slice_size_;
 };
 

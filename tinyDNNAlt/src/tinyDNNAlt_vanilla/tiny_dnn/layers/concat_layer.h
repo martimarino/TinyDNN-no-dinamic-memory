@@ -32,8 +32,8 @@ class concat_layer : public layer {
   /**
    * @param in_shapes [in] shapes of input tensors
    */
-  explicit concat_layer(const std::vector<shape3d> &in_shapes)
-    : layer(std::vector<vector_type>(in_shapes.size(), vector_type::data),
+  explicit concat_layer(const etl::vector<shape3d, MAX_INPUT_SIZE> &in_shapes)
+    : layer(etl::vector<vector_type, MAX_INPUT_SIZE>(in_shapes.size(), vector_type::data),
             {vector_type::data}),
       in_shapes_(in_shapes) {
     set_outshape();
@@ -44,9 +44,9 @@ class concat_layer : public layer {
    * @param ndim     [in] number of elements for each input
    */
   concat_layer(size_t num_args, size_t ndim)
-    : layer(std::vector<vector_type>(num_args, vector_type::data),
+    : layer(etl::vector<vector_type, MAX_INPUT_SIZE>(num_args, vector_type::data),
             {vector_type::data}),
-      in_shapes_(std::vector<shape3d>(num_args, shape3d(ndim, 1, 1))) {
+      in_shapes_(etl::vector<shape3d, MAX_INPUT_SIZE>(num_args, shape3d(ndim, 1, 1))) {
     set_outshape();
   }
 
@@ -61,9 +61,9 @@ class concat_layer : public layer {
 
   std::string layer_type() const override { return "concat"; }
 
-  std::vector<shape3d> in_shape() const override { return in_shapes_; }
+  etl::vector<shape3d, MAX_VSIZE> in_shape() const override { return in_shapes_; }
 
-  std::vector<shape3d> out_shape() const override { return {out_shape_}; }
+  etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return {out_shape_}; }
 
   void forward_propagation(const std::vector<tensor_t *> &in_data,
                            std::vector<tensor_t *> &out_data) override {
@@ -104,7 +104,7 @@ class concat_layer : public layer {
   friend struct serialization_buddy;
 
  private:
-  std::vector<shape3d> in_shapes_;
+  etl::vector<shape3d, MAX_VSIZE> in_shapes_;
   shape3d out_shape_;
 };
 

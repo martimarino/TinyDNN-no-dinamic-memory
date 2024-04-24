@@ -259,9 +259,9 @@ class layer : public node {
     }
   }
 
-  etl::vector<vector_type, MAX_INPUT_SIZE> in_types() const { return in_type_; }
+  etl::vector<vector_type, MAX_VSIZE> in_types() const { return in_type_; }
 
-  etl::vector<vector_type, MAX_OUTPUT_SIZE> out_types() const { return out_type_; }
+  etl::vector<vector_type, MAX_VSIZE> out_types() const { return out_type_; }
 
   void set_trainable(bool trainable) { trainable_ = trainable; }
 

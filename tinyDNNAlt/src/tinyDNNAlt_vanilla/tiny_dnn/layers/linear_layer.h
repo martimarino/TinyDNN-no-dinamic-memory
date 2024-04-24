@@ -33,11 +33,11 @@ class linear_layer : public layer {
       scale_(scale),
       bias_(bias) {}
 
-  std::vector<shape3d> in_shape() const override {
+  etl::vector<shape3d, MAX_VSIZE> in_shape() const override {
     return {shape3d(dim_, 1, 1)};
   }
 
-  std::vector<shape3d> out_shape() const override {
+  etl::vector<shape3d, MAX_VSIZE> out_shape() const override {
     return {shape3d(dim_, 1, 1)};
   }
 

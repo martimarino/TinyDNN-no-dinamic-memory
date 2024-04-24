@@ -47,7 +47,7 @@ class quantized_fully_connected_layer : public layer {
 
   size_t fan_out_size() const override { return params_.out_size_; }
 
-  std::vector<index3d<size_t>> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
     if (params_.has_bias_) {
       return {index3d<size_t>(params_.in_size_, 1, 1),
               index3d<size_t>(params_.in_size_, params_.out_size_, 1),
@@ -58,7 +58,7 @@ class quantized_fully_connected_layer : public layer {
     }
   }
 
-  std::vector<index3d<size_t>> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override {
     return {index3d<size_t>(params_.out_size_, 1, 1)};
   }
 

@@ -52,9 +52,9 @@ class power_layer : public layer {
 
   std::string layer_type() const override { return "power"; }
 
-  std::vector<shape3d> in_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_VSIZE> in_shape() const override { return {in_shape_}; }
 
-  std::vector<shape3d> out_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return {in_shape_}; }
 
   void forward_propagation(const std::vector<tensor_t *> &in_data,
                            std::vector<tensor_t *> &out_data) override {

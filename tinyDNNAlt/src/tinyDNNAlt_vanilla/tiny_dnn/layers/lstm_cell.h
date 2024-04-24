@@ -68,8 +68,8 @@ class lstm_cell : public cell {
       kernel_fwd_(std::move(other.kernel_fwd_)),
       kernel_back_(std::move(other.kernel_back_)) {}
 
-  inline std::vector<vector_type> input_order() {
-    std::vector<vector_type> types = {vector_type::data,  // input vector
+  inline etl::vector<vector_type, MAX_INPUT_SIZE> input_order() {
+    etl::vector<vector_type,MAX_INPUT_SIZE> types = {vector_type::data,  // input vector
                                       vector_type::aux,  // input state (h(t-1))
                                       vector_type::aux,  // memory (c(t-1))
                                       vector_type::weight,   // W[x->i]
@@ -89,7 +89,7 @@ class lstm_cell : public cell {
     return types;
   }
 
-  inline std::vector<vector_type> output_order() {
+  inline etl::vector<vector_type, MAX_OUTPUT_SIZE> output_order() {
     return {vector_type::data,  // output vector
             vector_type::aux,   // output state  h(t)
             vector_type::aux,   // output memory c(t)
@@ -103,8 +103,8 @@ class lstm_cell : public cell {
 
   inline size_t fan_out_size(size_t i) const { return in_shape()[i].height_; }
 
-  inline std::vector<index3d<size_t>> in_shape() const {
-    std::vector<index3d<size_t>> shape = {
+  inline etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const {
+    etl::vector<index3d<size_t>, MAX_VSIZE> shape = {
       index3d<size_t>(params_.in_size_, 1, 1),                    // x
       index3d<size_t>(params_.out_size_, 1, 1),                   // h(t-1)
       index3d<size_t>(params_.out_size_, 1, 1),                   // c(t-1)
@@ -125,7 +125,7 @@ class lstm_cell : public cell {
     return shape;
   }
 
-  inline std::vector<index3d<size_t>> out_shape() const {
+  inline etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const {
     return {index3d<size_t>(params_.out_size_, 1, 1),   // o(t)
             index3d<size_t>(params_.out_size_, 1, 1),   // h(t)
             index3d<size_t>(params_.out_size_, 1, 1),   // c(t)
