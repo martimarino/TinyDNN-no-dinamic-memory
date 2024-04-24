@@ -9,8 +9,6 @@
 
 #include <string>
 
-
-
 // Based on:
 // https://github.com/DeepMark/deepmark/blob/master/torch/image%2Bvideo/alexnet.lua
 template <size_t width,size_t height,size_t n_classes>
