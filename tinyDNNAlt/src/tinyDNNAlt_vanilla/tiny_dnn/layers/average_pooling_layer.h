@@ -22,7 +22,7 @@
 namespace tiny_dnn {
 
 // forward_propagation
-inline void tiny_average_pooling_kernel(
+inline void tiny_average_pooling_kernel (
   bool parallelize,
   const std::vector<tensor_t *> &in_data,
   std::vector<tensor_t *> &out_data,
