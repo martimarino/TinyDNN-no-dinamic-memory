@@ -134,10 +134,10 @@ class tiny_backend : public backend {
     }
   }
 
-  void conv2d_q(const std::vector<tensor_t *> &in_data,
-                const std::vector<tensor_t *> &out_data,
-                std::vector<tensor_t *> &out_grad,
-                std::vector<tensor_t *> &in_grad) override {
+  void conv2d_q(const etl::vector<tensor_t *, MAX_INPUT_DATA> &in_data,
+                const etl::vector<tensor_t *, MAX_OUTPUT_DATA> &out_data,
+                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     conv_layer_worker_specific_storage &cws = (*conv_layer_worker_storage_);
 
     std::vector<const vec_t *> &prev_out = cws.prev_out_padded_;

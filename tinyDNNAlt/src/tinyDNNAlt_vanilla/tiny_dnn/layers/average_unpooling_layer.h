@@ -23,11 +23,11 @@ namespace tiny_dnn {
 // forward_propagation
 inline void tiny_average_unpooling_kernel(
   bool parallelize,
-  const std::vector<tensor_t *> &in_data,
-  std::vector<tensor_t *> &out_data,
+  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
   const shape3d &out_dim,
   float_t scale_factor,
-  std::vector<typename partial_connected_layer::wi_connections> &out2wi) {
+  etl::vector<typename partial_connected_layer::wi_connections, MAX_TENSOR_SIZE> &out2wi) {
   CNN_UNREFERENCED_PARAMETER(scale_factor);
   for_i(parallelize, in_data[0]->size(), [&](size_t sample) {
     const vec_t &in = (*in_data[0])[sample];
@@ -171,16 +171,16 @@ class average_unpooling_layer : public partial_connected_layer {
 
   std::string layer_type() const override { return "ave-unpool"; }
 
-  void forward_propagation(const std::vector<tensor_t *> &in_data,
-                           std::vector<tensor_t *> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     tiny_average_unpooling_kernel(parallelize_, in_data, out_data, out_,
                                   Base::scale_factor_, Base::out2wi_);
   }
 
-  void back_propagation(const std::vector<tensor_t *> &in_data,
-                        const std::vector<tensor_t *> &out_data,
-                        std::vector<tensor_t *> &out_grad,
-                        std::vector<tensor_t *> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     tiny_average_unpooling_back_kernel(
       parallelize_, in_data, out_data, out_grad, in_grad, in_,
       Base::scale_factor_, Base::weight2io_, Base::in2wo_, Base::bias2out_);

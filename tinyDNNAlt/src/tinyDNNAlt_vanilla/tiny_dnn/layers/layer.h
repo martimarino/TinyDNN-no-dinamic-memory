@@ -418,8 +418,8 @@ class layer : public node {
    * @param in_data  input vectors of this layer (data, weight, bias)
    * @param out_data output vectors
    **/
-  virtual void forward_propagation(const std::vector<tensor_t *> &in_data,
-                                   std::vector<tensor_t *> &out_data) = 0;
+  virtual void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                                   etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) = 0;
 
   /**
    * return delta of previous layer (delta=\frac{dE}{da}, a=wx in
@@ -431,10 +431,10 @@ class layer : public node {
    * @param in_grad  gradient of input vectors (i-th vector correspond with
    *in_data[i])
    **/
-  virtual void back_propagation(const std::vector<tensor_t *> &in_data,
-                                const std::vector<tensor_t *> &out_data,
-                                std::vector<tensor_t *> &out_grad,
-                                std::vector<tensor_t *> &in_grad) = 0;
+  virtual void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                                const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) = 0;
 
   /**
    * return delta2 of previous layer (delta2=\frac{d^2E}{da^2}, diagonal of
@@ -774,12 +774,12 @@ class layer : public node {
   /** Pointer to the function for biases initialization */
   std::shared_ptr<weight_init::function> bias_init_;
 
-  std::vector<tensor_t *> fwd_in_data_;
-  std::vector<tensor_t *> fwd_out_data_;
-  std::vector<tensor_t *> bwd_in_data_;
-  std::vector<tensor_t *> bwd_in_grad_;
-  std::vector<tensor_t *> bwd_out_data_;
-  std::vector<tensor_t *> bwd_out_grad_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> fwd_in_data_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> fwd_out_data_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> bwd_in_data_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> bwd_in_grad_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> bwd_out_data_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> bwd_out_grad_;
 
   /* @brief Allocates the necessary edge memory in a specific
    * incoming connection.

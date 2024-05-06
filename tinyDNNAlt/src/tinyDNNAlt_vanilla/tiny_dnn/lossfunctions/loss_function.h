@@ -173,9 +173,9 @@ vec_t gradient(const vec_t &y, const vec_t &t) {
 }
 
 template <typename E>
-std::vector<vec_t> gradient(const std::vector<vec_t> &y,
-                            const std::vector<vec_t> &t) {
-  std::vector<vec_t> grads(y.size());
+etl::vector<vec_t, MAX_TENSOR_SIZE> gradient(const etl::vector<vec_t, MAX_OUTPUT_SIZE> &y,
+                            const etl::vector<vec_t, MAX_OUTPUT_SIZE> &t) {
+  etl::vector<vec_t, MAX_TENSOR_SIZE> grads(y.size());
 
   assert(y.size() == t.size());
 
@@ -184,8 +184,8 @@ std::vector<vec_t> gradient(const std::vector<vec_t> &y,
   return grads;
 }
 
-inline void apply_cost_if_defined(std::vector<vec_t> &sample_gradient,
-                                  const std::vector<vec_t> &sample_cost) {
+inline void apply_cost_if_defined(etl::vector<vec_t, MAX_TENSOR_SIZE> &sample_gradient,
+                                  const etl::vector<vec_t, MAX_TENSOR_SIZE> &sample_cost) {
   if (sample_gradient.size() == sample_cost.size()) {
     // @todo consider adding parallelism
     const size_t channel_count = sample_gradient.size();
@@ -204,13 +204,13 @@ inline void apply_cost_if_defined(std::vector<vec_t> &sample_gradient,
 
 // gradient for a minibatch
 template <typename E>
-std::vector<tensor_t> gradient(const std::vector<tensor_t> &y,
-                               const std::vector<tensor_t> &t,
-                               const std::vector<tensor_t> &t_cost) {
+etl::vector<tensor_t, MAX_TENSOR_SIZE> gradient(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &y,
+                               const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t,
+                               const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t_cost) {
   const size_t sample_count  = y.size();
   const size_t channel_count = y[0].size();
 
-  std::vector<tensor_t> gradients(sample_count);
+  etl::vector<tensor_t, MAX_TENSOR_SIZE> gradients(sample_count);
 
   CNN_UNREFERENCED_PARAMETER(channel_count);
   assert(y.size() == t.size());
