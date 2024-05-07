@@ -424,7 +424,7 @@ class convolutional_layer : public layer {
   friend struct serialization_buddy;
 
  private:
-  tensor_t *in_data_padded(const std::vector<tensor_t *> &in) {
+  tensor_t *in_data_padded(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in) {
     return (params_.pad_type == padding::valid) ? in[0]
                                                 : &cws_.prev_out_padded_;
   }
@@ -547,9 +547,9 @@ class convolutional_layer : public layer {
   std::shared_ptr<core::OpKernel> kernel_fwd_;
   std::shared_ptr<core::OpKernel> kernel_back_;
 
-  std::vector<tensor_t *> fwd_in_data_;
-  std::vector<tensor_t *> bwd_in_data_;
-  std::vector<tensor_t *> bwd_in_grad_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> fwd_in_data_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> bwd_in_data_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> bwd_in_grad_;
 
   /* Buffer to store padded data */
   struct conv_layer_worker_specific_storage {

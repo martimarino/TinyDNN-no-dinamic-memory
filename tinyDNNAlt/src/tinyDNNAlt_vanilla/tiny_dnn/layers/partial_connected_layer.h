@@ -125,7 +125,7 @@ class partial_connected_layer : public layer {
       });
 
       for (size_t i = 0; i < bias2out_.size(); i++) {
-        const std::vector<size_t> &outs = bias2out_[i];
+        const etl::vector<size_t, MAX_TENSOR_SIZE> &outs = bias2out_[i];
         float_t diff{0};
 
         for (auto o : outs) diff += curr_delta[sample][o];
@@ -138,11 +138,11 @@ class partial_connected_layer : public layer {
   friend struct serialization_buddy;
 
  protected:
-  std::vector<io_connections> weight2io_;  // weight_id -> [(in_id, out_id)]
-  std::vector<wi_connections> out2wi_;     // out_id -> [(weight_id, in_id)]
-  std::vector<wo_connections> in2wo_;      // in_id -> [(weight_id, out_id)]
-  std::vector<std::vector<size_t>> bias2out_;
-  std::vector<size_t> out2bias_;
+  etl::vector<io_connections, MAX_TENSOR_SIZE> weight2io_;  // weight_id -> [(in_id, out_id)]
+  etl::vector<wi_connections, MAX_TENSOR_SIZE> out2wi_;     // out_id -> [(weight_id, in_id)]
+  etl::vector<wo_connections, MAX_TENSOR_SIZE> in2wo_;      // in_id -> [(weight_id, out_id)]
+  etl::vector<etl::vector<size_t, MAX_TENSOR_SIZE>, MAX_TENSOR_SIZE> bias2out_;
+  etl::vector<size_t, MAX_TENSOR_SIZE> out2bias_;
   float_t scale_factor_;
 };
 

@@ -96,7 +96,7 @@ inline void tiny_average_unpooling_back_kernel(
     }
 
     for (size_t i = 0; i < bias2out.size(); i++) {
-      const std::vector<size_t> &outs = bias2out[i];
+      const etl::vector<size_t, MAX_TENSOR_SIZE> &outs = bias2out[i];
       float_t diff{0};
 
       for (auto o : outs) diff += curr_delta[o];

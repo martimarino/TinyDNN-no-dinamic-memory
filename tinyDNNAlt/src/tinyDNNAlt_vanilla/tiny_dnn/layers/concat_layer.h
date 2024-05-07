@@ -81,7 +81,7 @@ class concat_layer : public layer {
   }
 
   void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *,MAX_TENSOR_SIZE> &out_data,
+                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
                         etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
                         etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     CNN_UNREFERENCED_PARAMETER(in_data);

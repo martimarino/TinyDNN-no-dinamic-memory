@@ -247,9 +247,9 @@ class deconvolutional_layer : public layer {
    *in_data[i])
    **/
   void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *,MAX_TENSOR_SIZE> &out_data,
+                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
                         etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *,MAX_TENSOR_SIZE> &in_grad) override {
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     layer::backend_->deconv2d(in_data, out_data, out_grad, in_grad);
   }
 

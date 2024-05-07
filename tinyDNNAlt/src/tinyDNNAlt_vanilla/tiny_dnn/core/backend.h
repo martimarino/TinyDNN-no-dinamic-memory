@@ -118,35 +118,35 @@ class backend {
 
   // core math functions
 
-  virtual void conv2d_q(const std::vector<tensor_t *> &in_data,
-                        std::vector<tensor_t *> &out_data) = 0;
+  virtual void conv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) = 0;
 
   virtual void conv2d_eq(const std::vector<tensor_t *> &in_data,
                          std::vector<tensor_t *> &out_data) = 0;
 
-  virtual void conv2d_q(const std::vector<tensor_t *> &in_data,
-                        const std::vector<tensor_t *> &out_data,
-                        std::vector<tensor_t *> &out_grad,
-                        std::vector<tensor_t *> &in_grad) = 0;
+  virtual void conv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) = 0;
 
-  virtual void deconv2d(const std::vector<tensor_t *> &in_data,
-                        std::vector<tensor_t *> &out_data) = 0;
+  virtual void deconv2d(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) = 0;
 
-  virtual void deconv2d_q(const std::vector<tensor_t *> &in_data,
-                          std::vector<tensor_t *> &out_data) = 0;
+  virtual void deconv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) = 0;
 
-  virtual void deconv2d_eq(const std::vector<tensor_t *> &in_data,
-                           std::vector<tensor_t *> &out_data) = 0;
+  virtual void deconv2d_eq(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) = 0;
 
-  virtual void deconv2d(const std::vector<tensor_t *> &in_data,
-                        const std::vector<tensor_t *> &out_data,
-                        std::vector<tensor_t *> &out_grad,
-                        std::vector<tensor_t *> &in_grad) = 0;
+  virtual void deconv2d(const std::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) = 0;
 
-  virtual void deconv2d_q(const std::vector<tensor_t *> &in_data,
-                          const std::vector<tensor_t *> &out_data,
-                          std::vector<tensor_t *> &out_grad,
-                          std::vector<tensor_t *> &in_grad) = 0;
+  virtual void deconv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
+                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) = 0;
 
   virtual void fully_q(const std::vector<tensor_t *> &in_data,
                        std::vector<tensor_t *> &out_data) = 0;

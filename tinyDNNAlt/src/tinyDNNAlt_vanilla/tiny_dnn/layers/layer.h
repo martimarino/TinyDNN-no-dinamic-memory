@@ -60,8 +60,8 @@ class layer : public node {
    * @param out_type[M] type of output vector
    *
    **/
-  layer(const etl::vector<vector_type, MAX_VSIZE> &in_type,
-        const etl::vector<vector_type, MAX_VSIZE> &out_type)
+  layer(const etl::vector<vector_type, MAX_TENSOR_SIZE> &in_type,
+        const etl::vector<vector_type, MAX_TENSOR_SIZE> &out_type)
     : node(in_type.size(), out_type.size()),
       initialized_(false),
       parallelize_(true),
@@ -138,13 +138,13 @@ class layer : public node {
                  [](const shape3d &s) { return s.size(); });
   }
 
-  etl::vector<shape3d, MAX_VSIZE> in_data_shape() {  // shape for each input data
+  etl::vector<shape3d, MAX_TENSOR_SIZE> in_data_shape() {  // shape for each input data
     return filter(in_shape(), [&](size_t i) {  // NOLINT
       return in_type_[i] == vector_type::data;
     }, MAX_INPUT_SIZE);
   }
 
-  etl::vector<shape3d, MAX_VSIZE> out_data_shape() { // shape for each output data
+  etl::vector<shape3d, MAX_TENSOR_SIZE> out_data_shape() { // shape for each output data
     return filter(out_shape(), [&](size_t i) {  // NOLINT
       return out_type_[i] == vector_type::data;
     }, MAX_OUTPUT_SIZE);
@@ -280,7 +280,7 @@ class layer : public node {
   /**
    * array of input shapes (width x height x depth)
    **/
-  virtual etl::vector<shape3d, MAX_VSIZE> in_shape() const = 0;
+  virtual etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const = 0;
 
   /**
    * set input shape of a layer (only used internally while shape inferring)
@@ -295,7 +295,7 @@ class layer : public node {
   /**
    * array of output shapes (width x height x depth)
    **/
-  virtual etl::vector<shape3d, MAX_VSIZE> out_shape() const = 0;
+  virtual etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const = 0;
 
   /**
    * name of layer, should be unique for each concrete class
@@ -745,9 +745,9 @@ class layer : public node {
   /** The number of output vectors/edges */
   size_t out_channels_;
   /** Vector containing the type of data for inputs */
-  etl::vector<vector_type, MAX_VSIZE> in_type_;
+  etl::vector<vector_type, MAX_TENSOR_SIZE> in_type_;
   /** Vector containing the type of data for outputs */
-  etl::vector<vector_type, MAX_VSIZE> out_type_;
+  etl::vector<vector_type, MAX_TENSOR_SIZE> out_type_;
   /** The current backend type for operations */
   core::backend_t backend_type_;
   /** The backend instance (deprecated) */

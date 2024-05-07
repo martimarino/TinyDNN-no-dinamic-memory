@@ -65,16 +65,16 @@ class OpKernelContext {
     op_params_ = std::unique_ptr<OpParams>(new OpParams());
   }
 
-  void set_in_out(const std::vector<tensor_t *> &in_data,
-                  std::vector<tensor_t *> &out_data) {
+  void set_in_out(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
     in_data_  = const_cast<std::vector<tensor_t *> *>(&in_data);
     out_data_ = &out_data;
   }
 
-  void set_in_out(const std::vector<tensor_t *> &in_data,
-                  const std::vector<tensor_t *> &out_data,
-                  std::vector<tensor_t *> &out_grad,
-                  std::vector<tensor_t *> &in_grad) {
+  void set_in_out(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) {
     in_data_  = const_cast<std::vector<tensor_t *> *>(&in_data);
     out_data_ = const_cast<std::vector<tensor_t *> *>(&out_data);
     out_grad_ = &out_grad;
