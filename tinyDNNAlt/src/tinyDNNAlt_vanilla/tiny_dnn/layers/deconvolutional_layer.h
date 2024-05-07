@@ -227,8 +227,8 @@ class deconvolutional_layer : public layer {
            (params_.weight.height_ * params_.h_stride) * params_.out.depth_;
   }
 
-  void forward_propagation(const std::vector<tensor_t *> &in_data,
-                           std::vector<tensor_t *> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *,MAX_TENSOR_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     // launch deconvolutional kernel
     layer::backend_->deconv2d(in_data, out_data);
   }
@@ -246,10 +246,10 @@ class deconvolutional_layer : public layer {
    *with
    *in_data[i])
    **/
-  void back_propagation(const std::vector<tensor_t *> &in_data,
-                        const std::vector<tensor_t *> &out_data,
-                        std::vector<tensor_t *> &out_grad,
-                        std::vector<tensor_t *> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                        const etl::vector<tensor_t *,MAX_TENSOR_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                        etl::vector<tensor_t *,MAX_TENSOR_SIZE> &in_grad) override {
     layer::backend_->deconv2d(in_data, out_data, out_grad, in_grad);
   }
 

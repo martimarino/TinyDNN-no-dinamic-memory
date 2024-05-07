@@ -43,10 +43,10 @@ class flatten_layer : public layer {
       });
   }
 
-  void back_propagation(const std::vector<tensor_t *> &in_data,
-                        const std::vector<tensor_t *> &out_data,
-                        std::vector<tensor_t *> &out_grad,
-                        std::vector<tensor_t *> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
   	    const size_t num_samples = (*out_data[0]).size();
 		for(int i = 0; i < num_samples; ++i ) {
       		tiny_dnn::float_t *ins = &(*in_data[0])[i][0];

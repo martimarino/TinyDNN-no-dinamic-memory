@@ -73,8 +73,8 @@ class l2_normalization_layer : public layer {
     return {index3d<size_t>(in_spatial_size_, 1, in_channels_)};
   }
 
-  void forward_propagation(const std::vector<tensor_t *> &in_data,
-                           std::vector<tensor_t *> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     tensor_t &in  = *in_data[0];
     tensor_t &out = *out_data[0];
 
@@ -102,10 +102,10 @@ class l2_normalization_layer : public layer {
     });
   }
 
-  void back_propagation(const std::vector<tensor_t *> &in_data,
-                        const std::vector<tensor_t *> &out_data,
-                        std::vector<tensor_t *> &out_grad,
-                        std::vector<tensor_t *> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     //tensor_t &prev_delta     = *in_grad[0];
     //tensor_t &curr_delta     = *out_grad[0];
     //const tensor_t &curr_out = *out_data[0];

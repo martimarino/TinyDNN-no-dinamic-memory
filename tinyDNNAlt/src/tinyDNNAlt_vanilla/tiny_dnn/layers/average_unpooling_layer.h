@@ -57,15 +57,15 @@ inline void tiny_average_unpooling_kernel(
 // back_propagation
 inline void tiny_average_unpooling_back_kernel(
   bool parallelize,
-  const std::vector<tensor_t *> &in_data,
-  const std::vector<tensor_t *> &out_data,
-  std::vector<tensor_t *> &out_grad,
-  std::vector<tensor_t *> &in_grad,
+  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad,
   const shape3d &in_dim,
   float_t scale_factor,
-  std::vector<typename partial_connected_layer::io_connections> &weight2io,
-  std::vector<typename partial_connected_layer::wo_connections> &in2wo,
-  std::vector<std::vector<size_t>> &bias2out) {
+  etl::vector<typename partial_connected_layer::io_connections, MAX_TENSOR_SIZE> &weight2io,
+  etl::vector<typename partial_connected_layer::wo_connections, MAX_TENSOR_SIZE> &in2wo,
+  etl::vector<etl::vector<size_t, MAX_TENSOR_SIZE>, MAX_TENSOR_SIZE> &bias2out) {
   CNN_UNREFERENCED_PARAMETER(out_data);
   CNN_UNREFERENCED_PARAMETER(scale_factor);
   for_i(parallelize, in_data[0]->size(), [&](size_t sample) {

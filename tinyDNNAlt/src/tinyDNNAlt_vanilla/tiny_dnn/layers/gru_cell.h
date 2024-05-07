@@ -125,8 +125,8 @@ class gru_cell : public cell {
       index3d<size_t>(params_.out_size_, 1, 1)};  // aux state  - z(t) (1-z)
   }
 
-  inline void forward_propagation(const std::vector<tensor_t *> &in_data,
-                                  std::vector<tensor_t *> &out_data) {
+  inline void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
     // forward gru op context
     fwd_ctx_.set_in_out(in_data, out_data);
     fwd_ctx_.setParallelize(cell::wrapper_->parallelize());
@@ -136,10 +136,10 @@ class gru_cell : public cell {
     kernel_fwd_->compute(fwd_ctx_);
   }
 
-  inline void back_propagation(const std::vector<tensor_t *> &in_data,
-                               const std::vector<tensor_t *> &out_data,
-                               std::vector<tensor_t *> &out_grad,
-                               std::vector<tensor_t *> &in_grad) {
+  inline void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                               const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) {
     // backward gru op context
     bwd_ctx_.set_in_out(in_data, out_data, out_grad, in_grad);
     bwd_ctx_.setParallelize(cell::wrapper_->parallelize());

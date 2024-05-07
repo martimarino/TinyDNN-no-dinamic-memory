@@ -65,8 +65,8 @@ class concat_layer : public layer {
 
   etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return {out_shape_}; }
 
-  void forward_propagation(const std::vector<tensor_t *> &in_data,
-                           std::vector<tensor_t *> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     const size_t num_samples = (*out_data[0]).size();
 
     for_i(num_samples, [&](size_t s) {
@@ -80,10 +80,10 @@ class concat_layer : public layer {
     });
   }
 
-  void back_propagation(const std::vector<tensor_t *> &in_data,
-                        const std::vector<tensor_t *> &out_data,
-                        std::vector<tensor_t *> &out_grad,
-                        std::vector<tensor_t *> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                        const etl::vector<tensor_t *,MAX_TENSOR_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     CNN_UNREFERENCED_PARAMETER(in_data);
     CNN_UNREFERENCED_PARAMETER(out_data);
 
