@@ -48,10 +48,10 @@ static void make_final(tiny_dnn::network<tiny_dnn::sequential> &nn,
                        int n_train_epochs,
                        int n_minibatch,
                        int num_train,
-                       std::vector<tiny_dnn::label_t> test_labels,
-                       std::vector<tiny_dnn::label_t> train_labels,
-                       std::vector<tiny_dnn::vec_t> test_images,
-                       std::vector<tiny_dnn::vec_t> train_images,
+                       etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE> test_labels,
+                       etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE> train_labels,
+                       etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE> test_images,
+                       etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE> train_images,
                        double total_elapsed) {
   std::string filename = make_filename(learning_rate,n_train_epochs,n_minibatch,num_train,"../../plot/finalPerf",".txt");
   std::ofstream of(filename);

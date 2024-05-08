@@ -90,14 +90,14 @@ namespace tiny_dnn {
          * @param first        : gradient of cost function(dE/dy)
          * @param worker_index : id of worker-task
          **/
-        virtual void backward(const etl::vector<tensor_t, MAX_SAMPLES> &first) = 0;
+        virtual void backward(const etl::vector<tensor_t, MAX_INPUT_SIZE> &first) = 0;
 
         /**
          * @param first input  : data vectors
          * @param worker_index : id of worker-task
          **/
         virtual etl::vector<tensor_t, MAX_CHANNEL_SIZE> forward(
-                const etl::vector<tensor_t, MAX_SAMPLES> &first) = 0;  // NOLINT
+                const etl::vector<tensor_t, MAX_INPUT_SIZE> &first) = 0;  // NOLINT
 
         /**
          * update weights and clear all gradients
@@ -233,8 +233,8 @@ namespace tiny_dnn {
         // input:  [sample][channel][feature]
         // output: [channel][sample][feature]
         void reorder_for_layerwise_processing(
-                const etl::vector<tensor_t, MAX_SAMPLES> &input,
-                etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> &output) { //output matrice con colonne pari ai canali e colonne pari ai sample
+                const etl::vector<tensor_t, MAX_INPUT_SIZE> &input,
+                etl::vector<etl::vector<const vec_t *, MAX_INPUT_SIZE>, MAX_CHANNEL_SIZE> &output) { //output matrice con colonne pari ai canali e colonne pari ai sample
             size_t sample_count  = input.size();
             size_t channel_count = input[0].size();
 
@@ -287,8 +287,8 @@ namespace tiny_dnn {
             }
         }
 
-        etl::vector<tensor_t, MAX_CHANNEL_SIZE> forward(const etl::vector<tensor_t, MAX_SAMPLES> &first) override {
-            etl::vector<etl::vector<const vec_t *, MAX_SAMPLES>, MAX_CHANNEL_SIZE> reordered_data;
+        etl::vector<tensor_t, MAX_CHANNEL_SIZE> forward(const etl::vector<tensor_t, MAX_INPUT_SIZE> &first) override {
+            etl::vector<etl::vector<const vec_t *, MAX_INPUT_SIZE>, MAX_CHANNEL_SIZE> reordered_data;
             reorder_for_layerwise_processing(first, reordered_data);
             assert(reordered_data.size() == 1);
 

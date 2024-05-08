@@ -227,7 +227,7 @@ class layer : public node {
     }
   }
 
-  void set_in_data(const etl::vector<const vec_t *, MAX_SAMPLES> *data, size_t cnt) {
+  void set_in_data(const etl::vector<const vec_t *, MAX_INPUT_SIZE> *data, size_t cnt) {
     CNN_UNREFERENCED_PARAMETER(cnt);
     size_t n = 0;
     for (size_t i = 0; i < in_channels_; i++) {

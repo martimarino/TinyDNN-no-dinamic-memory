@@ -193,7 +193,7 @@ namespace tiny_dnn {
 #else
             // a workaround to reduce memory consumption by skipping wrapper
             // function
-            etl::vector<tensor_t, 1> a(1);
+            etl::vector<tensor_t, MAX_INPUT_SIZE> a(1);
             a[0].emplace_back(in);
             return fprop(a)[0][0];
 #endif
@@ -461,7 +461,7 @@ namespace tiny_dnn {
         /**
          * test and generate confusion-matrix for classification task
          **/
-        result test(const etl::vector<vec_t, MAX_INPUT_SIZE> &in, const etl::vector<label_t, MAX_OUTPUT_SIZE> &t) {
+        result test(const etl::vector<vec_t, MAX_INPUT_SIZE> &in, const etl::vector<label_t, MAX_INPUT_SIZE> &t) {
             result test_result;
             set_netphase(net_phase::test);
             for (size_t i = 0; i < in.size(); i++) {

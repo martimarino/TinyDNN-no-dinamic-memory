@@ -22,18 +22,18 @@ public:
 	tiny_dnn::float_t learning_rate;
 	tiny_dnn::optimizer* optimizer;
 	bool stochastic;
-	std::vector<tiny_dnn::label_t> tlabels, vlabels;
-  	std::vector<tiny_dnn::vec_t> timages, vimages;
+	etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE> tlabels, vlabels;
+  	etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE> timages, vimages;
 	NNTrainParams(uint32_t epochs,
 				  uint32_t num_train,
 				  uint32_t minibatch_size,
 				  tiny_dnn::float_t learning_rate,
 				  bool stochastic,
 				  tiny_dnn::optimizer* optimizer,
-				  const std::vector<tiny_dnn::label_t>& tlabels, 
-				  const std::vector<tiny_dnn::label_t>& vlabels,
-  				  const std::vector<tiny_dnn::vec_t>& timages,
-  				  const std::vector<tiny_dnn::vec_t>& vimages) {
+				  const etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE>& tlabels,
+				  const etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE>& vlabels,
+  				  const etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE>& timages,
+  				  const etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE>& vimages) {
 		this->epochs = epochs;
 		this->num_train = num_train;
 		this->learning_rate = learning_rate;
@@ -60,10 +60,10 @@ public:
 
 
 	NNTrainParams(std::string confPath,tiny_dnn::optimizer* optimizer,
-				      const std::vector<tiny_dnn::label_t>& tlabels, 
-				      const std::vector<tiny_dnn::label_t>& vlabels,
-  				      const std::vector<tiny_dnn::vec_t>& timages,
-  				      const std::vector<tiny_dnn::vec_t>& vimages): NNTrainParams(confPath) {
+				      const etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE>& tlabels,
+				      const etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE>& vlabels,
+  				      const etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE>& timages,
+  				      const etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE>& vimages): NNTrainParams(confPath) {
 		this->optimizer = optimizer;		
 		this->tlabels = tlabels;
 		this->vlabels = vlabels;
@@ -73,10 +73,10 @@ public:
 
 
 	void setTrainData(tiny_dnn::optimizer* optimizer,
-				      const std::vector<tiny_dnn::label_t>& tlabels, 
-				      const std::vector<tiny_dnn::label_t>& vlabels,
-  				      const std::vector<tiny_dnn::vec_t>& timages,
-  				      const std::vector<tiny_dnn::vec_t>& vimages) {
+				      const etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE>& tlabels,
+				      const etl::vector<tiny_dnn::label_t, MAX_INPUT_SIZE>& vlabels,
+  				      const etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE>& timages,
+  				      const etl::vector<tiny_dnn::vec_t, MAX_INPUT_SIZE>& vimages) {
 		this->optimizer = optimizer;		
 		this->tlabels = tlabels;
 		this->vlabels = vlabels;
