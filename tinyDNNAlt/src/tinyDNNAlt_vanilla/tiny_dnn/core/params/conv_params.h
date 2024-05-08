@@ -17,9 +17,9 @@ namespace tiny_dnn {
 namespace core {
 
 struct conv_layer_worker_specific_storage {
-  std::vector<const vec_t *> prev_out_padded_;
-  std::vector<vec_t> prev_out_buf_;
-  std::vector<vec_t> prev_delta_padded_;
+  etl::vector<const vec_t *, MAX_TENSOR_SIZE> prev_out_padded_;
+  etl::vector<vec_t, MAX_TENSOR_SIZE> prev_out_buf_;
+  etl::vector<vec_t, MAX_TENSOR_SIZE> prev_delta_padded_;
 };
 
 struct connection_table {

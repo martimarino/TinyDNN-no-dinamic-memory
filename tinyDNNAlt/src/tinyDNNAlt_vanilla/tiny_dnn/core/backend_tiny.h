@@ -100,7 +100,7 @@ class tiny_backend : public backend {
     const vec_t &W    = (*in_data[1])[0];
     const vec_t &bias = (*in_data[2])[0];
     tensor_t &out     = *out_data[0];
-    const std::vector<const vec_t *> &in =
+    const etl::vector<const vec_t *, MAX_TENSOR_SIZE> &in =
       (*conv_layer_worker_storage_).prev_out_padded_;  // input // NOLINT
 
     fill_tensor(out, float_t{0});
@@ -112,8 +112,8 @@ class tiny_backend : public backend {
   }
 
   // efficient quantization without abundant quantization/dequantization
-  void conv2d_eq(const std::vector<tensor_t *> &in_data,
-                 std::vector<tensor_t *> &out_data) override {
+  void conv2d_eq(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                 etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     copy_and_pad_input(*in_data[0]);
     const vec_t &W       = (*in_data[1])[0];
     const vec_t &bias    = (*in_data[2])[0];
@@ -123,7 +123,7 @@ class tiny_backend : public backend {
     tensor_t &out        = *out_data[0];
     tensor_t &out_r      = *out_data[1];
 
-    const std::vector<const vec_t *> &in =
+    const etl::vector<const vec_t *, MAX_TENSOR_SIZE> &in =
       (*conv_layer_worker_storage_).prev_out_padded_;  // input // NOLINT
 
     fill_tensor(out, float_t{0});
@@ -297,8 +297,8 @@ class tiny_backend : public backend {
     }
   }
 
-  void fully_q(const std::vector<tensor_t *> &in_data,
-               std::vector<tensor_t *> &out_data) override {
+  void fully_q(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
 #ifdef CNN_USE_GEMMLOWP
     const tensor_t &in = *in_data[0];
     const vec_t &W     = (*in_data[1])[0];
@@ -318,8 +318,8 @@ class tiny_backend : public backend {
 #endif
   }
 
-  void fully_eq(const std::vector<tensor_t *> &in_data,
-                std::vector<tensor_t *> &out_data) override {
+  void fully_eq(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
 #ifdef CNN_USE_GEMMLOWP
     const tensor_t &in   = *in_data[0];
     const vec_t &W       = (*in_data[1])[0];
@@ -344,10 +344,10 @@ class tiny_backend : public backend {
 #endif
   }
 
-  void fully_q(const std::vector<tensor_t *> &in_data,
-               const std::vector<tensor_t *> &out_data,
-               std::vector<tensor_t *> &out_grad,
-               std::vector<tensor_t *> &in_grad) override {
+  void fully_q(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+               const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
 #ifdef CNN_USE_GEMMLOWP
     const tensor_t &prev_out = *in_data[0];
     const vec_t &W           = (*in_data[1])[0];
