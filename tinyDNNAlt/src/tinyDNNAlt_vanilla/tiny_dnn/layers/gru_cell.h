@@ -82,7 +82,7 @@ class gru_cell : public cell {
     return types;
   }
 
-  inline etl::vector<vector_type, MAX_OUTPUT_SIZE> output_order() {
+  inline etl::vector<vector_type, MAX_TENSOR_SIZE> output_order() {
     return {vector_type::data,  // output vector   s(t)
             vector_type::aux,   // output state    s(t)
             vector_type::aux,   // internal state  h(t)

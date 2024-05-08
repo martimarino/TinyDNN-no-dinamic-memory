@@ -89,7 +89,7 @@ class lstm_cell : public cell {
     return types;
   }
 
-  inline etl::vector<vector_type, MAX_OUTPUT_SIZE> output_order() {
+  inline etl::vector<vector_type, MAX_TENSOR_SIZE> output_order() {
     return {vector_type::data,  // output vector
             vector_type::aux,   // output state  h(t)
             vector_type::aux,   // output memory c(t)

@@ -67,7 +67,7 @@ class OpKernelContext {
 
   void set_in_out(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
                   etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
-    in_data_  = const_cast<std::vector<tensor_t *> *>(&in_data);
+    in_data_  = const_cast<etl::vector<tensor_t *, MAX_TENSOR_SIZE> *>(&in_data);
     out_data_ = &out_data;
   }
 
@@ -75,8 +75,8 @@ class OpKernelContext {
                   const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
                   etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
                   etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) {
-    in_data_  = const_cast<std::vector<tensor_t *> *>(&in_data);
-    out_data_ = const_cast<std::vector<tensor_t *> *>(&out_data);
+    in_data_  = const_cast<etl::vector<tensor_t *, MAX_TENSOR_SIZE> *>(&in_data);
+    out_data_ = const_cast<etl::vector<tensor_t *, MAX_TENSOR_SIZE> *>(&out_data);
     out_grad_ = &out_grad;
     in_grad_  = &in_grad;
   }
@@ -118,10 +118,10 @@ class OpKernelContext {
   void setEngine(const backend_t engine) { op_params_->engine = engine; }
 
  private:
-  std::vector<tensor_t *> *in_data_;
-  std::vector<tensor_t *> *out_data_;
-  std::vector<tensor_t *> *out_grad_;
-  std::vector<tensor_t *> *in_grad_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> *in_data_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> *out_data_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> *out_grad_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> *in_grad_;
 
   std::unique_ptr<OpParams> op_params_;
 };

@@ -8,7 +8,7 @@
 
 namespace tiny_dnn {
 enum ShortcutSide { BEGIN, END };
-thread_local std::vector<std::queue<vec_t>*> shortcuts_;
+thread_local etl::vector<std::queue<vec_t>*, MAX_TENSOR_SIZE> shortcuts_;
 class shortcut_layer : public activation_layer {
  private:
   unsigned int mapping_;
