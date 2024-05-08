@@ -265,10 +265,10 @@ class tiny_backend : public backend {
                                        curr_delta, prev_delta);
   }
 
-  void deconv2d_q(const std::vector<tensor_t *> &in_data,
-                  const std::vector<tensor_t *> &out_data,
-                  std::vector<tensor_t *> &out_grad,
-                  std::vector<tensor_t *> &in_grad) override {
+  void deconv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
+                  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     deconv_layer_worker_specific_storage &cws = (*deconv_layer_worker_storage_);
     if (params_d_->pad_type == padding::same)
       copy_and_pad_delta(cws.curr_delta_padded, *in_grad[0]);

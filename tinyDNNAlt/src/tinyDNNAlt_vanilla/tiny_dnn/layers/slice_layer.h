@@ -52,8 +52,8 @@ class slice_layer : public layer {
   slice_layer(const shape3d &in_shape,
               slice_type slice_type,
               size_t num_outputs)
-    : layer(etl::vector<vector_type, MAX_INPUT_SIZE>(1, vector_type::data),
-            etl::vector<vector_type, MAX_OUTPUT_SIZE>(num_outputs, vector_type::data)),
+    : layer(etl::vector<vector_type, MAX_TENSOR_SIZE>(1, vector_type::data),
+            etl::vector<vector_type, MAX_TENSOR_SIZE>(num_outputs, vector_type::data)),
       in_shape_(in_shape),
       slice_type_(slice_type),
       num_outputs_(num_outputs) {
@@ -63,8 +63,8 @@ class slice_layer : public layer {
   slice_layer(const layer &prev_layer,
               slice_type slice_type,
               size_t num_outputs)
-    : layer(etl::vector<vector_type,  MAX_INPUT_SIZE>(1, vector_type::data),
-            etl::vector<vector_type, MAX_OUTPUT_SIZE>(num_outputs, vector_type::data)),
+    : layer(etl::vector<vector_type,  MAX_TENSOR_SIZE>(1, vector_type::data),
+            etl::vector<vector_type, MAX_TENSOR_SIZE>(num_outputs, vector_type::data)),
       in_shape_(prev_layer.out_shape()[0]),
       slice_type_(slice_type),
       num_outputs_(num_outputs) {
@@ -114,7 +114,7 @@ class slice_layer : public layer {
 
  private:
   void slice_data_forward(const tensor_t &in_data,
-                          std::vector<tensor_t *> &out_data) {
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
     const vec_t *in = &in_data[0];
 
     for (size_t i = 0; i < num_outputs_; i++) {
@@ -126,7 +126,7 @@ class slice_layer : public layer {
     }
   }
 
-  void slice_data_backward(std::vector<tensor_t *> &out_grad,
+  void slice_data_backward(etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
                            tensor_t &in_grad) {
     vec_t *in = &in_grad[0];
 
@@ -140,7 +140,7 @@ class slice_layer : public layer {
   }
 
   void slice_channels_forward(const tensor_t &in_data,
-                              std::vector<tensor_t *> &out_data) {
+                              etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
     size_t channel_idx       = 0;
     const size_t num_samples = in_data.size();
     const size_t spatial_dim = in_shape_.area();
@@ -156,7 +156,7 @@ class slice_layer : public layer {
     }
   }
 
-  void slice_channels_backward(std::vector<tensor_t *> &out_grad,
+  void slice_channels_backward(etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
                                tensor_t &in_grad) {
     size_t channel_idx       = 0;
     const size_t num_samples = in_grad.size();

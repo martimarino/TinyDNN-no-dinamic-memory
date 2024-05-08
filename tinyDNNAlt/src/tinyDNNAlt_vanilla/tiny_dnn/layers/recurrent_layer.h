@@ -358,7 +358,7 @@ class recurrent_layer : public layer {
 
   // Helper function to set internal input buffers to the correct size.
   inline void reshape_forward_buffers_(const size_t batch_size,
-                                       const std::vector<tensor_t *> &in_data) {
+                                       const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data) {
     for (size_t i = 0; i < in_data.size(); i++) {
       auto &buffer   = *input_buffer_[i];
       auto in_shape_ = in_shape();
@@ -387,7 +387,7 @@ class recurrent_layer : public layer {
 
   // Helper function to set internal output buffers to the correct size.
   inline void reshape_backward_buffers_(
-    const size_t batch_size, const std::vector<tensor_t *> &in_data) {
+    const size_t batch_size, const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data) {
     for (size_t i = 0; i < in_data.size(); i++) {
       auto &buffer   = *input_buffer_[i];
       auto in_shape_ = in_shape();
@@ -438,11 +438,11 @@ class recurrent_layer : public layer {
   std::vector<bool> state_mask_;
 
   // buffers for state transitions
-  std::vector<tensor_t *> input_buffer_;
-  std::vector<tensor_t *> output_buffer_;
-  std::vector<tensor_t *> input_grad_buffer_;
-  std::vector<tensor_t *> output_grad_buffer_;
-  std::vector<bool> delete_mask_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> input_buffer_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> output_buffer_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> input_grad_buffer_;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> output_grad_buffer_;
+  etl::vector<bool, MAX_TENSOR_SIZE> delete_mask_;
 };
 
 }  // namespace tiny_dnn

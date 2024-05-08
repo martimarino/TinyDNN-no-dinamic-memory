@@ -19,17 +19,18 @@ class cell : public layer {
  public:
   cell() : layer({}, {}) {}
 
-  virtual etl::vector<vector_type, MAX_INPUT_SIZE> input_order() = 0;
+  virtual etl::vector<vector_type, MAX_TENSOR_SIZE> input_order() = 0;
 
-  virtual etl::vector<vector_type, MAX_OUTPUT_SIZE> output_order() = 0;
+  virtual etl::vector<vector_type, MAX_TENSOR_SIZE> output_order() = 0;
 
-  virtual void forward_propagation(const std::vector<tensor_t *> &in_data,
-                                   std::vector<tensor_t *> &out_data) = 0;
+  virtual void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                                   etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) = 0;
 
-  virtual void back_propagation(const std::vector<tensor_t *> &in_data,
-                                const std::vector<tensor_t *> &out_data,
-                                std::vector<tensor_t *> &out_grad,
-                                std::vector<tensor_t *> &in_grad) = 0;
+  virtual void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                                const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) = 0;
+
 
   virtual core::backend_t backend_type() const { return wrapper_->engine(); }
 

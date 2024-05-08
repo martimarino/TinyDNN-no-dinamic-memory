@@ -86,7 +86,7 @@ class zero_pad_layer : public layer {
   }
 
   void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *> &out_data,
+                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
                         etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
                         etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     tensor_t &dx       = *in_grad[0];
