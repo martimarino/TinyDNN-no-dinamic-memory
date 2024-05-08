@@ -78,7 +78,7 @@ class slice_layer : public layer {
   etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return out_shapes_; }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     switch (slice_type_) {
       case slice_type::slice_samples:
         slice_data_forward(*in_data[0], out_data);

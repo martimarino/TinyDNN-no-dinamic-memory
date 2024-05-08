@@ -330,7 +330,7 @@ namespace tiny_dnn {
          * array.
          *
          * @code
-         * network<sequential> net;
+	 * network<sequential> net;
          * adagrad opt;
          *
          * net << layers::fc(2, 3) << activation::tanh()

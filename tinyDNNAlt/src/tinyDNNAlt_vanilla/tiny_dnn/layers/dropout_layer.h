@@ -87,7 +87,7 @@ class dropout_layer : public layer {
   }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     const tensor_t &in = *in_data[0];
     tensor_t &out      = *out_data[0];
 

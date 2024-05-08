@@ -126,7 +126,7 @@ class gru_cell : public cell {
   }
 
   inline void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
+                                   etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
     // forward gru op context
     fwd_ctx_.set_in_out(in_data, out_data);
     fwd_ctx_.setParallelize(cell::wrapper_->parallelize());
@@ -137,9 +137,9 @@ class gru_cell : public cell {
   }
 
   inline void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                               const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) {
+                                 const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                                 etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                                 etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) {
     // backward gru op context
     bwd_ctx_.set_in_out(in_data, out_data, out_grad, in_grad);
     bwd_ctx_.setParallelize(cell::wrapper_->parallelize());

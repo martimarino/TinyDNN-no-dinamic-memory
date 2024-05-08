@@ -81,7 +81,7 @@ class lrn_layer : public layer {
   std::string layer_type() const override { return "lrn"; }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     // @todo revise the parallelism strategy
     for (size_t sample = 0, sample_count = in_data[0]->size();
          sample < sample_count; ++sample) {
@@ -97,9 +97,9 @@ class lrn_layer : public layer {
   }
 
   void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     CNN_UNREFERENCED_PARAMETER(in_data);
     CNN_UNREFERENCED_PARAMETER(out_data);
     CNN_UNREFERENCED_PARAMETER(out_grad);

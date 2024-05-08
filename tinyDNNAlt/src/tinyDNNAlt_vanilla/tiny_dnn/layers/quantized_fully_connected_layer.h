@@ -63,7 +63,7 @@ class quantized_fully_connected_layer : public layer {
   }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     if (in_data.size() == 2 || in_data.size() == 3) {
       layer::backend_->fully_q(in_data, out_data);
 

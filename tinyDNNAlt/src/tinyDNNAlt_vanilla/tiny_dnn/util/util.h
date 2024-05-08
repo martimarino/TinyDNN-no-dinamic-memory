@@ -143,7 +143,7 @@ typedef size_t label_t;
 
 typedef size_t layer_size_t;  // for backward compatibility
 
-typedef etl::vector<float_t, MAX_WEIGTHS_SIZE> vec_t;
+typedef etl::vector<float_t, MAX_TENSOR_SIZE> vec_t;
 typedef etl::vector<vec_t, MAX_TENSOR_SIZE> tensor_t;
 
 template <typename T>
@@ -387,7 +387,7 @@ inline bool is_trainable_weight(vector_type vtype) {
   return (vtype & vector_type::weight) == vector_type::weight;
 }
 
-inline std::vector<vector_type> std_input_order(bool has_bias) {
+inline etl::vector<vector_type, MAX_TENSOR_SIZE> std_input_order(bool has_bias) {
   if (has_bias) {
     return {vector_type::data, vector_type::weight, vector_type::bias};
   } else {

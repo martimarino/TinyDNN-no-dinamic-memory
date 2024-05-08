@@ -153,7 +153,7 @@ class recurrent_layer : public layer {
    * @param out_data [out] output tensors.
    */
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     size_t batch_size = (*out_data[0]).size() / seq_len_;
     // create buffers to store the batches of the sequences
     reshape_forward_buffers_(batch_size, in_data);
@@ -224,9 +224,9 @@ class recurrent_layer : public layer {
    * @param in_grad  [out] computed gradients.
    */
   void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     size_t batch_size = (*out_data[0]).size() / seq_len_;
     // resize input buffers
     reshape_backward_buffers_(batch_size, in_data);

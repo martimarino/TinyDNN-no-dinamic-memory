@@ -234,7 +234,7 @@ class quantized_convolutional_layer : public layer {
    * @param out_data     output vectors
    **/
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+                            etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     // launch convolutional kernel
     if (in_data.size() == 3) {
       layer::backend_->conv2d_q(in_data, out_data);

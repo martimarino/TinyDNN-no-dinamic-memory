@@ -71,9 +71,9 @@ class global_average_pooling_layer : public layer {
   }
 
   void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     bwd_ctx_.set_in_out(in_data, out_data, out_grad, in_grad);
     bwd_ctx_.setParallelize(layer::parallelize());
     bwd_ctx_.setEngine(layer::engine());

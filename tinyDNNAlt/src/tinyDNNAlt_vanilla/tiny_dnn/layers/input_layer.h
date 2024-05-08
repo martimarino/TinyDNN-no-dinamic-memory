@@ -28,14 +28,14 @@ class input_layer : public layer {
   std::string layer_type() const override { return "input"; }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
-    *out_data[0] = *in_data[0];
-  }
+                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+      *out_data[0] = *in_data[0];
+    }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+    void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
+                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
     // do nothing
     CNN_UNREFERENCED_PARAMETER(in_data);
     CNN_UNREFERENCED_PARAMETER(out_data);

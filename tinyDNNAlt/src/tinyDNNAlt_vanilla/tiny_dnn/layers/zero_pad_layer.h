@@ -68,7 +68,7 @@ class zero_pad_layer : public layer {
   etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return {out_shape_}; }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
     const tensor_t &x = *in_data[0];
     tensor_t &y       = *out_data[0];
 

@@ -136,7 +136,7 @@ class lstm_cell : public cell {
   }
 
   inline void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
+                                    etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
     // forward lstm op context
     fwd_ctx_.set_in_out(in_data, out_data);
     fwd_ctx_.setParallelize(cell::wrapper_->parallelize());
