@@ -193,7 +193,7 @@ namespace tiny_dnn {
 #else
             // a workaround to reduce memory consumption by skipping wrapper
             // function
-            etl::vector<tensor_t, MAX_INPUT_SIZE> a(1);
+            etl::vector<tensor_t, 1> a(1);
             a[0].emplace_back(in);
             return fprop(a)[0][0];
 #endif
@@ -204,7 +204,7 @@ namespace tiny_dnn {
             return fprop(etl::vector<tensor_t, MAX_INPUT_SIZE>{in})[0];
         }
 
-        etl::vector<tensor_t, MAX_INPUT_SIZE> fprop(const etl::vector<tensor_t, MAX_INPUT_SIZE> &in) {
+        etl::vector<tensor_t, MAX_INPUT_SIZE> fprop(const etl::vector<tensor_t, 1> &in) {
             return net_.forward(in);
         }
 
