@@ -73,9 +73,9 @@ class slice_layer : public layer {
 
   std::string layer_type() const override { return "slice"; }
 
-  etl::vector<shape3d, MAX_VSIZE> in_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override { return {in_shape_}; }
 
-  etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return out_shapes_; }
+  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override { return out_shapes_; }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
                              etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
@@ -216,7 +216,7 @@ class slice_layer : public layer {
   shape3d in_shape_;
   slice_type slice_type_;
   size_t num_outputs_;
-  etl::vector<shape3d, MAX_VSIZE> out_shapes_;
+  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shapes_;
   std::vector<size_t> slice_size_;
 };
 

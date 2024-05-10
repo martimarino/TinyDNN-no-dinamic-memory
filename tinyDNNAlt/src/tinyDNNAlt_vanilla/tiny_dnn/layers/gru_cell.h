@@ -96,8 +96,8 @@ class gru_cell : public cell {
 
   inline size_t fan_out_size(size_t i) const { return in_shape()[i].height_; }
 
-  inline etl::vector<index3d<size_t>,MAX_VSIZE> in_shape() const {
-    etl::vector<index3d<size_t>, MAX_VSIZE> shape = {
+  inline etl::vector<index3d<size_t>,MAX_TENSOR_SIZE> in_shape() const {
+    etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> shape = {
       index3d<size_t>(params_.in_size_, 1, 1),                    // x[t]
       index3d<size_t>(params_.out_size_, 1, 1),                   // s[t-1]
       index3d<size_t>(params_.in_size_, params_.out_size_, 1),    // W[x->x]
@@ -114,7 +114,7 @@ class gru_cell : public cell {
     return shape;
   }
 
-  inline etl::vector<index3d<size_t>,MAX_VSIZE> out_shape() const {
+  inline etl::vector<index3d<size_t>,MAX_TENSOR_SIZE> out_shape() const {
     return {
       index3d<size_t>(params_.out_size_, 1, 1),   // output vector  s(t)
       index3d<size_t>(params_.out_size_, 1, 1),   // output state   s(t)

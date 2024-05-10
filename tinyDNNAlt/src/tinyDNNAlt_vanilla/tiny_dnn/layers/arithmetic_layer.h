@@ -33,11 +33,11 @@ class elementwise_add_layer : public layer {
 
   std::string layer_type() const override { return "elementwise-add"; }
 
-  etl::vector<shape3d, MAX_VSIZE> in_shape() const override {
-    return etl::vector<shape3d, MAX_INPUT_SIZE>(num_args_, shape3d(dim_, 1, 1));
+  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override {
+    return etl::vector<shape3d, MAX_TENSOR_SIZE>(num_args_, shape3d(dim_, 1, 1));
   }
 
-  etl::vector<shape3d, MAX_VSIZE> out_shape() const override {
+  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override {
     return {shape3d(dim_, 1, 1)};
   }
 

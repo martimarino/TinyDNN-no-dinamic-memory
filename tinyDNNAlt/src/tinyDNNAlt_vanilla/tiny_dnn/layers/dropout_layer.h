@@ -58,11 +58,11 @@ class dropout_layer : public layer {
   ///< number of outgoing connections for each input unit
   size_t fan_out_size() const override { return 1; }
 
-  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
     return {index3d<size_t>(in_size_, 1, 1)};
   }
 
-  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override {
     return {index3d<size_t>(in_size_, 1, 1)};
   }
 

@@ -61,9 +61,9 @@ class concat_layer : public layer {
 
   std::string layer_type() const override { return "concat"; }
 
-  etl::vector<shape3d, MAX_VSIZE> in_shape() const override { return in_shapes_; }
+  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override { return in_shapes_; }
 
-  etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return {out_shape_}; }
+  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override { return {out_shape_}; }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
                            etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
@@ -104,7 +104,7 @@ class concat_layer : public layer {
   friend struct serialization_buddy;
 
  private:
-  etl::vector<shape3d, MAX_VSIZE> in_shapes_;
+  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shapes_;
   shape3d out_shape_;
 };
 

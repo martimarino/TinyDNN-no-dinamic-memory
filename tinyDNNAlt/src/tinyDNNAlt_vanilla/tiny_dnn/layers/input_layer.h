@@ -23,8 +23,8 @@ class input_layer : public layer {
     : layer({vector_type::data}, {vector_type::data}),
       shape_(shape3d(in_dim, 1, 1)) {}
 
-  etl::vector<shape3d, MAX_VSIZE> in_shape() const override { return {shape_}; }
-  etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return {shape_}; }
+  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override { return {shape_}; }
+  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override { return {shape_}; }
   std::string layer_type() const override { return "input"; }
 
   void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,

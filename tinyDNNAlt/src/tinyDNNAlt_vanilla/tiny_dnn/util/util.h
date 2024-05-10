@@ -334,8 +334,8 @@ size_t sumif(const etl::vector<T, MAX_INPUT_SIZE> &vec, Pred p, Sum s) {
 }
 
 template <typename T, typename Pred>
-etl::vector<T, MAX_VSIZE> filter(const etl::vector<T, MAX_VSIZE> &vec, Pred p, size_t size) {
-  etl::vector<T, MAX_VSIZE> res;
+etl::vector<T, MAX_TENSOR_SIZE> filter(const etl::vector<T, MAX_TENSOR_SIZE> &vec, Pred p, size_t size) {
+  etl::vector<T, MAX_TENSOR_SIZE> res;
   for (size_t i = 0; i < size; i++) {
     if (p(i)) res.push_back(vec[i]);
   }

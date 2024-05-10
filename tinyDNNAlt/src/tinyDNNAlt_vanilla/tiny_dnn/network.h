@@ -204,7 +204,7 @@ namespace tiny_dnn {
             return fprop(etl::vector<tensor_t, MAX_INPUT_SIZE>{in})[0];
         }
 
-        etl::vector<tensor_t, MAX_INPUT_SIZE> fprop(const etl::vector<tensor_t, 1> &in) {
+        etl::vector<tensor_t, MAX_CHANNEL_SIZE> fprop(const etl::vector<tensor_t, 1> &in) {
             return net_.forward(in);
         }
 

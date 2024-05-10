@@ -63,9 +63,9 @@ class activation_layer : public layer {
     : layer({vector_type::data}, {vector_type::data}),
       in_shape_(prev_layer.out_shape()[0]) {}
 
-  etl::vector<shape3d, MAX_VSIZE> in_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override { return {in_shape_}; }
 
-  etl::vector<shape3d, MAX_VSIZE> out_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override { return {in_shape_}; }
 
   void set_in_shape(const shape3d &in_shape) override {
     this->in_shape_ = in_shape;

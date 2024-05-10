@@ -137,11 +137,11 @@ class recurrent_layer : public layer {
     return cell_->in_shape()[i].height_;
   }
 
-  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
     return cell_->in_shape();
   }
 
-  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override {
     return cell_->out_shape();
   }
 

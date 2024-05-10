@@ -210,7 +210,7 @@ class layer : public node {
     return nodes;
   }
 
-  void set_out_grads(const etl::vector<const vec_t *, MAX_INPUT_SIZE> *grad, size_t cnt) {  /// ! da ricontrollare
+  void set_out_grads(const etl::vector<const vec_t *, 1> *grad, size_t cnt) {  /// ! da ricontrollare
     CNN_UNREFERENCED_PARAMETER(cnt);
     size_t n = 0;
     for (size_t i = 0; i < out_channels_; i++) {
@@ -227,7 +227,7 @@ class layer : public node {
     }
   }
 
-  void set_in_data(const etl::vector<const vec_t *, MAX_INPUT_SIZE> *data, size_t cnt) {
+  void set_in_data(const etl::vector<const vec_t *, 1> *data, size_t cnt) {
     CNN_UNREFERENCED_PARAMETER(cnt);
     size_t n = 0;
     for (size_t i = 0; i < in_channels_; i++) {
@@ -259,9 +259,9 @@ class layer : public node {
     }
   }
 
-  etl::vector<vector_type, MAX_VSIZE> in_types() const { return in_type_; }
+  etl::vector<vector_type, MAX_TENSOR_SIZE> in_types() const { return in_type_; }
 
-  etl::vector<vector_type, MAX_VSIZE> out_types() const { return out_type_; }
+  etl::vector<vector_type, MAX_TENSOR_SIZE> out_types() const { return out_type_; }
 
   void set_trainable(bool trainable) { trainable_ = trainable; }
 
@@ -466,13 +466,13 @@ class layer : public node {
    * graph. Will be this overhead reduced once we have the Tensor
    * class integrated?
    */
-  void forward(const etl::vector<tensor_t, MAX_INPUT_SIZE> &input,
+  void forward(const etl::vector<tensor_t, 1> &input,
                etl::vector<const tensor_t *, MAX_CHANNEL_SIZE> &out) {  // for test
     // allocate data in the computational graph without
     // resetting the weights.
     setup(false);
 
-    etl::vector<etl::vector<const vec_t *, MAX_INPUT_SIZE>, MAX_CHANNEL_SIZE> input2;
+    etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> input2;
     input2.resize(input.size());
     for (size_t i = 0; i < input.size(); ++i) {
       input2[i].resize(input[i].size());
@@ -494,7 +494,7 @@ class layer : public node {
     const etl::vector<tensor_t, MAX_CONNECTIONS> &out_grads) {  // for test
     setup(false);
 
-    etl::vector<etl::vector<const vec_t *, MAX_INPUT_SIZE>, MAX_CHANNEL_SIZE> grads2;
+    etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> grads2;
     grads2.resize(out_grads.size());
     for (size_t i = 0; i < out_grads.size(); ++i) {
       grads2[i].resize(out_grads[i].size());

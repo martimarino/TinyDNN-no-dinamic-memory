@@ -103,8 +103,8 @@ class lstm_cell : public cell {
 
   inline size_t fan_out_size(size_t i) const { return in_shape()[i].height_; }
 
-  inline etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const {
-    etl::vector<index3d<size_t>, MAX_VSIZE> shape = {
+  inline etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const {
+    etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> shape = {
       index3d<size_t>(params_.in_size_, 1, 1),                    // x
       index3d<size_t>(params_.out_size_, 1, 1),                   // h(t-1)
       index3d<size_t>(params_.out_size_, 1, 1),                   // c(t-1)
@@ -125,7 +125,7 @@ class lstm_cell : public cell {
     return shape;
   }
 
-  inline etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const {
+  inline etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const {
     return {index3d<size_t>(params_.out_size_, 1, 1),   // o(t)
             index3d<size_t>(params_.out_size_, 1, 1),   // h(t)
             index3d<size_t>(params_.out_size_, 1, 1),   // c(t)

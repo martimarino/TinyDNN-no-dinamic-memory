@@ -152,11 +152,11 @@ class max_pooling_layer : public layer {
     kernel_back_->compute(bwd_ctx_);
   }
 
-  etl::vector<index3d<size_t>, MAX_VSIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
     return {params_.in};
   }
 
-  etl::vector<index3d<size_t>, MAX_VSIZE> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override {
     return {params_.out};
   }
 
