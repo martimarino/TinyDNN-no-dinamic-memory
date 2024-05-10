@@ -7,7 +7,7 @@
 */
 #pragma once
 
-
+#define CNN_NO_SERIALIZATION
 
 #include "tiny_dnn/config.h"
 #include "tiny_dnn/network.h"
@@ -36,7 +36,6 @@
 #include "tiny_dnn/layers/batch_normalization_layer.h"
 #include "tiny_dnn/layers/cell.h"
 #include "tiny_dnn/layers/cells.h"
-#include "tiny_dnn/activations/shortcut.h"
 
 #include "tiny_dnn/layers/concat_layer.h"
 #include "tiny_dnn/layers/flatten_layer.h"
@@ -81,12 +80,15 @@
 
 #ifdef QT_BOARD
 #include "../tinyboard/tinyboard.h"
-#endif
-
 #include "tiny_dnn/models/NNTrainParams.h"
 #include "tiny_dnn/models/NNTrainSession.h"
 #include "tiny_dnn/models/NNModel.h"
+#include "tiny_dnn/activations/shortcut.h"
 #include "tiny_dnn/layers/residual.h"
+#endif
+
+
+
 
 
 #ifdef DNN_USE_IMAGE_API
@@ -187,10 +189,10 @@ using softsign = tiny_dnn::softsign_layer;
 
 
 }  // namespace activation
-
+/*
 namespace residual {
 	using sc = tiny_dnn::shortcut_layer;
-}
+}*/
 
 
 using batch_norm = tiny_dnn::batch_normalization_layer;
