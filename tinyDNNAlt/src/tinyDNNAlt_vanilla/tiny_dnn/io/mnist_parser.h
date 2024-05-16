@@ -78,7 +78,7 @@ inline void parse_mnist_image(std::ifstream &ifs,
  * @param labels     [out] parsed label data
  **/
 inline void parse_mnist_labels(const std::string &label_file,
-                               std::vector<label_t> *labels) {
+                               etl::vector<label_t, MAX_TENSOR_SIZE> *labels) {
   std::ifstream ifs(label_file.c_str(), std::ios::in | std::ios::binary);
 
   if (ifs.bad() || ifs.fail())
@@ -129,7 +129,7 @@ inline void parse_mnist_labels(const std::string &label_file,
  *
  **/
 inline void parse_mnist_images(const std::string &image_file,
-                               std::vector<vec_t> *images,
+                               etl::vector<vec_t, MAX_TENSOR_SIZE> *images,
                                double scale_min,
                                double scale_max,
                                int x_padding,

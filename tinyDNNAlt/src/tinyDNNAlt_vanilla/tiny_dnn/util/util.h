@@ -343,8 +343,8 @@ etl::vector<T, MAX_TENSOR_SIZE> filter(const etl::vector<T, MAX_TENSOR_SIZE> &ve
 }
 
 template <typename Result, typename T, typename Pred>
-etl::vector<Result, MAX_CHANNEL_SIZE> map_(const etl::vector<T, MAX_CHANNEL_SIZE> &vec, Pred p) {
-  etl::vector<Result, MAX_CHANNEL_SIZE> res(vec.size());
+etl::vector<Result, MAX_TENSOR_SIZE> map_(const etl::vector<T, MAX_TENSOR_SIZE> &vec, Pred p) {
+  etl::vector<Result, MAX_TENSOR_SIZE> res(vec.size());
   for (size_t i = 0; i < vec.size(); ++i) {
     res[i] = p(vec[i]);
   }

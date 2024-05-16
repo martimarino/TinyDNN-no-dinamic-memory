@@ -173,9 +173,9 @@ vec_t gradient(const vec_t &y, const vec_t &t) {
 }
 
 template <typename E>
-etl::vector<vec_t, MAX_TENSOR_SIZE> gradient(const etl::vector<vec_t, MAX_OUTPUT_SIZE> &y,
-                            const etl::vector<vec_t, MAX_OUTPUT_SIZE> &t) {
-  etl::vector<vec_t, MAX_TENSOR_SIZE> grads(y.size());
+etl::vector<vec_t, 1> gradient(const etl::vector<vec_t, MAX_TENSOR_SIZE> &y,
+                            const etl::vector<vec_t, MAX_TENSOR_SIZE> &t) {
+  etl::vector<vec_t, 1> grads(y.size());
 
   assert(y.size() == t.size());
 
@@ -204,13 +204,13 @@ inline void apply_cost_if_defined(etl::vector<vec_t, MAX_TENSOR_SIZE> &sample_gr
 
 // gradient for a minibatch
 template <typename E>
-etl::vector<tensor_t, MAX_TENSOR_SIZE> gradient(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &y,
+etl::vector<tensor_t, 1> gradient(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &y,
                                const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t,
                                const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t_cost) {
   const size_t sample_count  = y.size();
   const size_t channel_count = y[0].size();
 
-  etl::vector<tensor_t, MAX_TENSOR_SIZE> gradients(sample_count);
+  etl::vector<tensor_t, 1> gradients(sample_count);
 
   CNN_UNREFERENCED_PARAMETER(channel_count);
   assert(y.size() == t.size());
