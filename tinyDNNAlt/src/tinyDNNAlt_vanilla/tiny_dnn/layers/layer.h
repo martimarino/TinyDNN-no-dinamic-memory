@@ -156,8 +156,8 @@ class layer : public node {
   ///! @deprecated use out_data_size() instead
   size_t out_size() const { return out_data_size(); }
 
-  etl::vector<const vec_t *, MAX_CHANNEL_SIZE> weights() const {
-    etl::vector<const vec_t *, MAX_CHANNEL_SIZE> v;
+  etl::vector<const vec_t *, MAX_TENSOR_SIZE> weights() const {
+    etl::vector<const vec_t *, MAX_TENSOR_SIZE> v;
     for (size_t i = 0; i < in_channels_; i++) {
       if (is_trainable_weight(in_type_[i])) {
         v.push_back(get_weight_data(i));
@@ -166,8 +166,8 @@ class layer : public node {
     return v;
   }
 
-  etl::vector<vec_t *, MAX_CHANNEL_SIZE> weights() {
-    etl::vector<vec_t *, MAX_CHANNEL_SIZE> v;
+  etl::vector<vec_t *, MAX_TENSOR_SIZE> weights() {
+    etl::vector<vec_t *, MAX_TENSOR_SIZE> v;
     for (size_t i = 0; i < in_channels_; i++) {
       if (is_trainable_weight(in_type_[i])) {
         v.push_back(get_weight_data(i));
@@ -176,8 +176,8 @@ class layer : public node {
     return v;
   }
 
-  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> weights_grads() {
-    etl::vector<tensor_t *, MAX_CHANNEL_SIZE> v;
+  etl::vector<tensor_t *, MAX_TENSOR_SIZE> weights_grads() {
+    etl::vector<tensor_t *, MAX_TENSOR_SIZE> v;
     for (size_t i = 0; i < in_channels_; i++) {
       if (is_trainable_weight(in_type_[i])) {
         v.push_back(ith_in_node(i)->get_gradient());
@@ -186,24 +186,24 @@ class layer : public node {
     return v;
   }
 
-  etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> inputs() {
-    etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> nodes(in_channels_);
+  etl::vector<edgeptr_t, MAX_TENSOR_SIZE> inputs() {
+    etl::vector<edgeptr_t, MAX_TENSOR_SIZE> nodes(in_channels_);
     for (size_t i = 0; i < in_channels_; i++) {
       nodes[i] = ith_in_node(i);
     }
     return nodes;
   }
 
-  etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> outputs() { // assumes nr channels output at most those in input
-    etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> nodes(out_channels_);
+  etl::vector<edgeptr_t, MAX_TENSOR_SIZE> outputs() { // assumes nr channels output at most those in input
+    etl::vector<edgeptr_t, MAX_TENSOR_SIZE> nodes(out_channels_);
     for (size_t i = 0; i < out_channels_; i++) {
       nodes[i] = ith_out_node(i);
     }
     return nodes;
   }
 
-  etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> outputs() const {
-    etl::vector<edgeptr_t, MAX_CHANNEL_SIZE> nodes(out_channels_);
+  etl::vector<edgeptr_t, MAX_TENSOR_SIZE> outputs() const {
+    etl::vector<edgeptr_t, MAX_TENSOR_SIZE> nodes(out_channels_);
     for (size_t i = 0; i < out_channels_; i++) {
       nodes[i] = const_cast<layer *>(this)->ith_out_node(i);
     }
@@ -250,7 +250,7 @@ class layer : public node {
     }
   }
 
-  void output(etl::vector<const tensor_t *, MAX_CHANNEL_SIZE> &out) const {
+  void output(etl::vector<const tensor_t *, MAX_TENSOR_SIZE> &out) const {
     out.clear();
     for (size_t i = 0; i < out_channels_; i++) {
       if (out_type_[i] == vector_type::data) {
@@ -467,12 +467,12 @@ class layer : public node {
    * class integrated?
    */
   void forward(const etl::vector<tensor_t, 1> &input,
-               etl::vector<const tensor_t *, MAX_CHANNEL_SIZE> &out) {  // for test
+               etl::vector<const tensor_t *, MAX_TENSOR_SIZE> &out) {  // for test
     // allocate data in the computational graph without
     // resetting the weights.
     setup(false);
 
-    etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> input2;
+    etl::vector<etl::vector<const vec_t *, 1>, MAX_TENSOR_SIZE> input2;
     input2.resize(input.size());
     for (size_t i = 0; i < input.size(); ++i) {
       input2[i].resize(input[i].size());
@@ -490,11 +490,11 @@ class layer : public node {
     output(out);
   }
 
-  etl::vector<tensor_t, MAX_CHANNEL_SIZE> backward(
+  etl::vector<tensor_t, MAX_TENSOR_SIZE> backward(
     const etl::vector<tensor_t, MAX_CONNECTIONS> &out_grads) {  // for test
     setup(false);
 
-    etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> grads2;
+    etl::vector<etl::vector<const vec_t *, 1>, MAX_TENSOR_SIZE> grads2;
     grads2.resize(out_grads.size());
     for (size_t i = 0; i < out_grads.size(); ++i) {
       grads2[i].resize(out_grads[i].size());

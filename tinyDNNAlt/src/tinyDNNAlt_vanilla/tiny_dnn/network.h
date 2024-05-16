@@ -182,7 +182,7 @@ namespace tiny_dnn {
         void bprop(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &out,
                    const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t,
                    const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t_cost) {
-            etl::vector<tensor_t, MAX_OUTPUT_SIZE> delta = gradient<E>(out, t, t_cost);
+            etl::vector<tensor_t, MAX_TENSOR_SIZE> delta = gradient<E>(out, t, t_cost);
             net_.backward(delta);
         }
 
@@ -200,11 +200,11 @@ namespace tiny_dnn {
         }
 
         // convenience wrapper for the function below
-        etl::vector<vec_t, MAX_INPUT_SIZE> fprop(const etl::vector<vec_t, MAX_INPUT_SIZE> &in) {
-            return fprop(etl::vector<tensor_t, MAX_INPUT_SIZE>{in})[0];
+        etl::vector<vec_t, MAX_TENSOR_SIZE> fprop(const etl::vector<vec_t, MAX_INPUT_SIZE> &in) {
+            return fprop(etl::vector<tensor_t, MAX_TENSOR_SIZE>{in})[0];
         }
 
-        etl::vector<tensor_t, MAX_CHANNEL_SIZE> fprop(const etl::vector<tensor_t, 1> &in) {
+        etl::vector<tensor_t, MAX_TENSOR_SIZE> fprop(const etl::vector<tensor_t, 1> &in) {
             return net_.forward(in);
         }
 
@@ -1109,7 +1109,7 @@ namespace tiny_dnn {
         std::string name_;
         bool stop_training_;
         etl::vector<tensor_t, MAX_BATCH_SIZE> in_batch_;
-        etl::vector<tensor_t, MAX_BATCH_SIZE> t_batch_;
+        etl::vector<tensor_t, MAX_TENSOR_SIZE> t_batch_;
     };
 
 /**
