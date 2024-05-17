@@ -173,8 +173,8 @@ vec_t gradient(const vec_t &y, const vec_t &t) {
 }
 
 template <typename E>
-etl::vector<vec_t, 1> gradient(const etl::vector<vec_t, MAX_TENSOR_SIZE> &y,
-                            const etl::vector<vec_t, MAX_TENSOR_SIZE> &t) {
+etl::vector<vec_t, 1> gradient(const etl::vector<tensor_t, 1> &y,
+                            const etl::vector<tensor_t, 1> &t) {
   etl::vector<vec_t, 1> grads(y.size());
 
   assert(y.size() == t.size());
@@ -184,9 +184,9 @@ etl::vector<vec_t, 1> gradient(const etl::vector<vec_t, MAX_TENSOR_SIZE> &y,
   return grads;
 }
 
-inline void apply_cost_if_defined(etl::vector<vec_t, MAX_TENSOR_SIZE> &sample_gradient,
-                                  const etl::vector<vec_t, MAX_TENSOR_SIZE> &sample_cost) {
-  if (sample_gradient.size() == sample_cost.size()) {
+inline void apply_cost_if_defined(etl::vector<tensor_t, 1> &sample_gradient,
+                                  const etl::vector<tensor_t, 1> &sample_cost) {
+  /*if (sample_gradient.size() == sample_cost.size()) {
     // @todo consider adding parallelism
     const size_t channel_count = sample_gradient.size();
     for (size_t channel = 0; channel < channel_count; ++channel) {
@@ -199,14 +199,14 @@ inline void apply_cost_if_defined(etl::vector<vec_t, MAX_TENSOR_SIZE> &sample_gr
         }
       }
     }
-  }
+  }*/
 }
 
 // gradient for a minibatch
 template <typename E>
-etl::vector<tensor_t, 1> gradient(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &y,
-                               const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t,
-                               const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t_cost) {
+etl::vector<tensor_t, 1> gradient(const etl::vector<tensor_t, 1> &y,
+                               const etl::vector<tensor_t, 1> &t,
+                               const etl::vector<tensor_t, 1> &t_cost) {
   const size_t sample_count  = y.size();
   const size_t channel_count = y[0].size();
 
@@ -225,9 +225,9 @@ etl::vector<tensor_t, 1> gradient(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &
 
     gradients[sample] = gradient<E>(y[sample], t[sample]);
 
-    if (sample < t_cost.size()) {
+   /* if (sample < t_cost.size()) {
       apply_cost_if_defined(gradients[sample], t_cost[sample]);
-    }
+    }*/
   }
 
   return gradients;

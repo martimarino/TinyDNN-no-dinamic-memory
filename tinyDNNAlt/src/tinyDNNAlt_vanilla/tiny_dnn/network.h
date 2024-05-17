@@ -173,17 +173,17 @@ namespace tiny_dnn {
         void bprop(const etl::vector<vec_t, MAX_TENSOR_SIZE> &out,
                    const etl::vector<vec_t, MAX_TENSOR_SIZE> &t,
                    const etl::vector<vec_t, MAX_TENSOR_SIZE> &t_cost) {
-            bprop<E>(etl::vector<tensor_t,MAX_OUTPUT_SIZE>{out},
-            		etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t},
-                     etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t_cost});
+            /*bprop<E>(etl::vector<tensor_t,1>{out},
+            		etl::vector<tensor_t, 1>{t},
+                     etl::vector<tensor_t, 1>{t_cost});*/
         }
 
         template <typename E>
-        void bprop(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &out,
-                   const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t,
-                   const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t_cost) {
-            etl::vector<tensor_t, 1> delta = gradient<E>(out, t, t_cost);
-            net_.backward(delta);
+        void bprop(const etl::vector<tensor_t, 1> &out,
+                   const etl::vector<tensor_t, 1> &t,
+                   const etl::vector<tensor_t, 1> &t_cost) {
+           /* etl::vector<tensor_t, 1> delta = gradient<E>(out, t, t_cost);
+            net_.backward(delta);*/
         }
 
         vec_t fprop(const vec_t &in) {
@@ -200,11 +200,11 @@ namespace tiny_dnn {
         }
 
         // convenience wrapper for the function below
-        etl::vector<vec_t, MAX_TENSOR_SIZE> fprop(const etl::vector<vec_t, MAX_INPUT_SIZE> &in) {
+        etl::vector<vec_t, MAX_TENSOR_SIZE> fprop(const etl::vector<vec_t, MAX_TENSOR_SIZE> &in) {
             return fprop(etl::vector<tensor_t, 1>{in})[0];
         }
 
-        etl::vector<tensor_t, MAX_TENSOR_SIZE> fprop(const etl::vector<tensor_t, 1> &in) {
+        etl::vector<tensor_t, 1> fprop(const etl::vector<tensor_t, 1> &in) {
             return net_.forward(in);
         }
 
@@ -926,9 +926,9 @@ namespace tiny_dnn {
             CNN_UNREFERENCED_PARAMETER(num_tasks);
             std::copy(&in[0], &in[0] + batch_size, &in_batch_[0]);
             std::copy(&t[0], &t[0] + batch_size, &t_batch_[0]);
-            etl::vector<tensor_t, MAX_TENSOR_SIZE> t_cost_batch =
-                    t_cost ? etl::vector<tensor_t, MAX_TENSOR_SIZE>(&t_cost[0], &t_cost[0] + batch_size)
-                           : etl::vector<tensor_t, MAX_TENSOR_SIZE>();
+            etl::vector<tensor_t, 1> t_cost_batch =
+                    t_cost ? etl::vector<tensor_t, 1>(&t_cost[0], &t_cost[0] + batch_size)
+                           : etl::vector<tensor_t, 1>();
 
             bprop<E>(fprop(in_batch_), t_batch_, t_cost_batch);
             net_.update_weights(&optimizer);
@@ -1108,8 +1108,8 @@ namespace tiny_dnn {
 
         std::string name_;
         bool stop_training_;
-        etl::vector<tensor_t, MAX_BATCH_SIZE> in_batch_;
-        etl::vector<tensor_t, MAX_TENSOR_SIZE> t_batch_;
+        etl::vector<tensor_t, 1> in_batch_;
+        etl::vector<tensor_t, 1> t_batch_;
     };
 
 /**
