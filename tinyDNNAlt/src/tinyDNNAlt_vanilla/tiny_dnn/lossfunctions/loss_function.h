@@ -173,15 +173,9 @@ vec_t gradient(const vec_t &y, const vec_t &t) {
 }
 
 template <typename E>
-<<<<<<< HEAD
 etl::vector<vec_t, MAX_TENSOR_SIZE> gradient(const etl::vector<vec_t, MAX_TENSOR_SIZE> &y,
                             const etl::vector<vec_t, MAX_TENSOR_SIZE> &t) {
   etl::vector<vec_t, MAX_TENSOR_SIZE> grads(y.size());
-=======
-etl::vector<vec_t, 1> gradient(const etl::vector<vec_t, MAX_TENSOR_SIZE> &y,
-                            const etl::vector<vec_t, MAX_TENSOR_SIZE> &t) {
-  etl::vector<vec_t, 1> grads(y.size());
->>>>>>> b4fac29b69f002784c4991180fcd8db997312c1c
 
   assert(y.size() == t.size());
 

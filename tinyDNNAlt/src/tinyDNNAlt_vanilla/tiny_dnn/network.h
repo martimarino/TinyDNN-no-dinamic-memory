@@ -182,11 +182,7 @@ namespace tiny_dnn {
         void bprop(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &out,
                    const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t,
                    const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t_cost) {
-<<<<<<< HEAD
             etl::vector<tensor_t, MAX_TENSOR_SIZE> delta = gradient<E>(out, t, t_cost);
-=======
-            etl::vector<tensor_t, 1> delta = gradient<E>(out, t, t_cost);
->>>>>>> b4fac29b69f002784c4991180fcd8db997312c1c
             net_.backward(delta);
         }
 
@@ -205,11 +201,7 @@ namespace tiny_dnn {
 
         // convenience wrapper for the function below
         etl::vector<vec_t, MAX_TENSOR_SIZE> fprop(const etl::vector<vec_t, MAX_INPUT_SIZE> &in) {
-<<<<<<< HEAD
             return fprop(etl::vector<tensor_t, MAX_TENSOR_SIZE>{in})[0];
-=======
-            return fprop(etl::vector<tensor_t, 1>{in})[0];
->>>>>>> b4fac29b69f002784c4991180fcd8db997312c1c
         }
 
         etl::vector<tensor_t, MAX_TENSOR_SIZE> fprop(const etl::vector<tensor_t, 1> &in) {
