@@ -26,23 +26,23 @@ class elementwise_add_layer : public layer {
    * @param dim      [in] number of elements for each input
    */
   elementwise_add_layer(size_t num_args, size_t dim)
-    : layer(etl::vector<vector_type, MAX_INPUT_SIZE>(num_args, vector_type::data),
+    : layer(etl::vector<vector_type, MAX_CHANNEL_SIZE>(num_args, vector_type::data),
             {vector_type::data}),
       num_args_(num_args),
       dim_(dim) {}
 
   std::string layer_type() const override { return "elementwise-add"; }
 
-  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override {
-    return etl::vector<shape3d, MAX_TENSOR_SIZE>(num_args_, shape3d(dim_, 1, 1));
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> in_shape() const override {
+    return etl::vector<shape3d, MAX_CHANNEL_SIZE>(num_args_, shape3d(dim_, 1, 1));
   }
 
-  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override {
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> out_shape() const override {
     return {shape3d(dim_, 1, 1)};
   }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     const tensor_t &in1 = *in_data[0];
     tensor_t &out       = *out_data[0];
 
@@ -59,10 +59,10 @@ class elementwise_add_layer : public layer {
     }
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     CNN_UNREFERENCED_PARAMETER(in_data);
     CNN_UNREFERENCED_PARAMETER(out_data);
     for (size_t i = 0; i < num_args_; i++) *in_grad[i] = *out_grad[0];

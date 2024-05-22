@@ -68,8 +68,8 @@ class lstm_cell : public cell {
       kernel_fwd_(std::move(other.kernel_fwd_)),
       kernel_back_(std::move(other.kernel_back_)) {}
 
-  inline etl::vector<vector_type, MAX_INPUT_SIZE> input_order() {
-    etl::vector<vector_type,MAX_INPUT_SIZE> types = {vector_type::data,  // input vector
+  inline etl::vector<vector_type, MAX_CHANNEL_SIZE> input_order() {
+    etl::vector<vector_type,MAX_CHANNEL_SIZE> types = {vector_type::data,  // input vector
                                       vector_type::aux,  // input state (h(t-1))
                                       vector_type::aux,  // memory (c(t-1))
                                       vector_type::weight,   // W[x->i]
@@ -89,7 +89,7 @@ class lstm_cell : public cell {
     return types;
   }
 
-  inline etl::vector<vector_type, MAX_TENSOR_SIZE> output_order() {
+  inline etl::vector<vector_type, MAX_CHANNEL_SIZE> output_order() {
     return {vector_type::data,  // output vector
             vector_type::aux,   // output state  h(t)
             vector_type::aux,   // output memory c(t)
@@ -103,8 +103,8 @@ class lstm_cell : public cell {
 
   inline size_t fan_out_size(size_t i) const { return in_shape()[i].height_; }
 
-  inline etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const {
-    etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> shape = {
+  inline etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> in_shape() const {
+    etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> shape = {
       index3d<size_t>(params_.in_size_, 1, 1),                    // x
       index3d<size_t>(params_.out_size_, 1, 1),                   // h(t-1)
       index3d<size_t>(params_.out_size_, 1, 1),                   // c(t-1)
@@ -125,7 +125,7 @@ class lstm_cell : public cell {
     return shape;
   }
 
-  inline etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const {
+  inline etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> out_shape() const {
     return {index3d<size_t>(params_.out_size_, 1, 1),   // o(t)
             index3d<size_t>(params_.out_size_, 1, 1),   // h(t)
             index3d<size_t>(params_.out_size_, 1, 1),   // c(t)
@@ -135,8 +135,8 @@ class lstm_cell : public cell {
             index3d<size_t>(params_.out_size_, 1, 1)};  // tanh(c(t))
   }
 
-  inline void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                                    etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) {
+  inline void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                                    etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) {
     // forward lstm op context
     fwd_ctx_.set_in_out(in_data, out_data);
     fwd_ctx_.setParallelize(cell::wrapper_->parallelize());
@@ -146,10 +146,10 @@ class lstm_cell : public cell {
     kernel_fwd_->compute(fwd_ctx_);
   }
 
-  inline void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                               const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) {
+  inline void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                               const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                               etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                               etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) {
     // backward lstm op context
     bwd_ctx_.set_in_out(in_data, out_data, out_grad, in_grad);
     bwd_ctx_.setParallelize(cell::wrapper_->parallelize());

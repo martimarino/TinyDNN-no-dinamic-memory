@@ -60,8 +60,8 @@ class partial_connected_layer : public layer {
     bias2out_[bias_index].push_back(output_index);
   }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     const tensor_t &in = *in_data[0];
     const vec_t &W     = (*in_data[1])[0];
     const vec_t &b     = (*in_data[2])[0];
@@ -88,10 +88,10 @@ class partial_connected_layer : public layer {
     }
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     CNN_UNREFERENCED_PARAMETER(out_data);
     const tensor_t &prev_out = *in_data[0];
     const vec_t &W           = (*in_data[1])[0];
@@ -125,7 +125,7 @@ class partial_connected_layer : public layer {
       });
 
       for (size_t i = 0; i < bias2out_.size(); i++) {
-        const etl::vector<size_t, MAX_TENSOR_SIZE> &outs = bias2out_[i];
+        const etl::vector<size_t, MAX_CHANNEL_SIZE> &outs = bias2out_[i];
         float_t diff{0};
 
         for (auto o : outs) diff += curr_delta[sample][o];
@@ -138,11 +138,11 @@ class partial_connected_layer : public layer {
   friend struct serialization_buddy;
 
  protected:
-  etl::vector<io_connections, MAX_TENSOR_SIZE> weight2io_;  // weight_id -> [(in_id, out_id)]
-  etl::vector<wi_connections, MAX_TENSOR_SIZE> out2wi_;     // out_id -> [(weight_id, in_id)]
-  etl::vector<wo_connections, MAX_TENSOR_SIZE> in2wo_;      // in_id -> [(weight_id, out_id)]
-  etl::vector<etl::vector<size_t, MAX_TENSOR_SIZE>, MAX_TENSOR_SIZE> bias2out_;
-  etl::vector<size_t, MAX_TENSOR_SIZE> out2bias_;
+  etl::vector<io_connections, MAX_CHANNEL_SIZE> weight2io_;  // weight_id -> [(in_id, out_id)]
+  etl::vector<wi_connections, MAX_CHANNEL_SIZE> out2wi_;     // out_id -> [(weight_id, in_id)]
+  etl::vector<wo_connections, MAX_CHANNEL_SIZE> in2wo_;      // in_id -> [(weight_id, out_id)]
+  etl::vector<etl::vector<size_t, MAX_CHANNEL_SIZE>, MAX_CHANNEL_SIZE> bias2out_;
+  etl::vector<size_t, MAX_CHANNEL_SIZE> out2bias_;
   float_t scale_factor_;
 };
 

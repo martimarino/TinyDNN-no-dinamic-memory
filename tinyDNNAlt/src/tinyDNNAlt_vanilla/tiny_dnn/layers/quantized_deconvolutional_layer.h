@@ -231,8 +231,8 @@ class quantized_deconvolutional_layer : public layer {
            (params_.weight.height_ * params_.h_stride) * params_.out.depth_;
   }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                            etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                            etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     // launch deconvolutional kernel
     if (in_data.size() == 3) {
       layer::backend_->deconv2d_q(in_data, out_data);
@@ -254,14 +254,14 @@ class quantized_deconvolutional_layer : public layer {
    *with
    *in_data[i])
    **/
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                          const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     layer::backend_->deconv2d_q(in_data, out_data, out_grad, in_grad);
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> in_shape() const override {
     if (params_.has_bias) {
       return {params_.in, params_.weight,
               index3d<size_t>(1, 1, params_.out.depth_)};
@@ -270,7 +270,7 @@ class quantized_deconvolutional_layer : public layer {
     }
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> out_shape() const override {
     return {params_.out_unpadded};
   }
 

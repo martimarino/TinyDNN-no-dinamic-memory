@@ -63,25 +63,25 @@ class activation_layer : public layer {
     : layer({vector_type::data}, {vector_type::data}),
       in_shape_(prev_layer.out_shape()[0]) {}
 
-  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> in_shape() const override { return {in_shape_}; }
 
-  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override { return {in_shape_}; }
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> out_shape() const override { return {in_shape_}; }
 
   void set_in_shape(const shape3d &in_shape) override {
     this->in_shape_ = in_shape;
   }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     const tensor_t &x = *in_data[0];
     tensor_t &y       = *out_data[0];
     for_i(x.size(), [&](size_t i) { forward_activation(x[i], y[i]); });
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     tensor_t &dx       = *in_grad[0];
     const tensor_t &dy = *out_grad[0];
     const tensor_t &x  = *in_data[0];

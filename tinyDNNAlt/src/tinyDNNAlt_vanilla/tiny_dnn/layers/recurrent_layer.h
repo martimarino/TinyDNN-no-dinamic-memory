@@ -137,11 +137,11 @@ class recurrent_layer : public layer {
     return cell_->in_shape()[i].height_;
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> in_shape() const override {
     return cell_->in_shape();
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> out_shape() const override {
     return cell_->out_shape();
   }
 
@@ -152,8 +152,8 @@ class recurrent_layer : public layer {
    * batch_size, dim2, ..., dimn).
    * @param out_data [out] output tensors.
    */
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                             etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     size_t batch_size = (*out_data[0]).size() / seq_len_;
     // create buffers to store the batches of the sequences
     reshape_forward_buffers_(batch_size, in_data);
@@ -223,10 +223,10 @@ class recurrent_layer : public layer {
    * @param out_grad [in]  next layer gradients.
    * @param in_grad  [out] computed gradients.
    */
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                          const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     size_t batch_size = (*out_data[0]).size() / seq_len_;
     // resize input buffers
     reshape_backward_buffers_(batch_size, in_data);
@@ -358,7 +358,7 @@ class recurrent_layer : public layer {
 
   // Helper function to set internal input buffers to the correct size.
   inline void reshape_forward_buffers_(const size_t batch_size,
-                                       const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data) {
+                                       const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data) {
     for (size_t i = 0; i < in_data.size(); i++) {
       auto &buffer   = *input_buffer_[i];
       auto in_shape_ = in_shape();
@@ -387,7 +387,7 @@ class recurrent_layer : public layer {
 
   // Helper function to set internal output buffers to the correct size.
   inline void reshape_backward_buffers_(
-    const size_t batch_size, const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data) {
+    const size_t batch_size, const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data) {
     for (size_t i = 0; i < in_data.size(); i++) {
       auto &buffer   = *input_buffer_[i];
       auto in_shape_ = in_shape();
@@ -438,11 +438,11 @@ class recurrent_layer : public layer {
   std::vector<bool> state_mask_;
 
   // buffers for state transitions
-  etl::vector<tensor_t *, MAX_TENSOR_SIZE> input_buffer_;
-  etl::vector<tensor_t *, MAX_TENSOR_SIZE> output_buffer_;
-  etl::vector<tensor_t *, MAX_TENSOR_SIZE> input_grad_buffer_;
-  etl::vector<tensor_t *, MAX_TENSOR_SIZE> output_grad_buffer_;
-  etl::vector<bool, MAX_TENSOR_SIZE> delete_mask_;
+  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> input_buffer_;
+  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> output_buffer_;
+  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> input_grad_buffer_;
+  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> output_grad_buffer_;
+  etl::vector<bool, MAX_CHANNEL_SIZE> delete_mask_;
 };
 
 }  // namespace tiny_dnn

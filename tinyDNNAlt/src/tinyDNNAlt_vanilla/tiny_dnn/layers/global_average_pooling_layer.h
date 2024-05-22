@@ -61,8 +61,8 @@ class global_average_pooling_layer : public layer {
 
   size_t fan_out_size() const override { return 1; }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     fwd_ctx_.set_in_out(in_data, out_data);
     fwd_ctx_.setParallelize(layer::parallelize());
     fwd_ctx_.setEngine(layer::engine());
@@ -70,10 +70,10 @@ class global_average_pooling_layer : public layer {
     kernel_fwd_->compute(fwd_ctx_);
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                          const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     bwd_ctx_.set_in_out(in_data, out_data, out_grad, in_grad);
     bwd_ctx_.setParallelize(layer::parallelize());
     bwd_ctx_.setEngine(layer::engine());
@@ -81,11 +81,11 @@ class global_average_pooling_layer : public layer {
     kernel_back_->compute(bwd_ctx_);
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> in_shape() const override {
     return {params_.in};
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> out_shape() const override {
     return {params_.out};
   }
 

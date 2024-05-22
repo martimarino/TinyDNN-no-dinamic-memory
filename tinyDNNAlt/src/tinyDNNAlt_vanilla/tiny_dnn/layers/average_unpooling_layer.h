@@ -23,11 +23,11 @@ namespace tiny_dnn {
 // forward_propagation
 inline void tiny_average_unpooling_kernel(
   bool parallelize,
-  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
+  const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
   const shape3d &out_dim,
   float_t scale_factor,
-  etl::vector<typename partial_connected_layer::wi_connections, MAX_TENSOR_SIZE> &out2wi) {
+  etl::vector<typename partial_connected_layer::wi_connections, MAX_CHANNEL_SIZE> &out2wi) {
   CNN_UNREFERENCED_PARAMETER(scale_factor);
   for_i(parallelize, in_data[0]->size(), [&](size_t sample) {
     const vec_t &in = (*in_data[0])[sample];
@@ -57,15 +57,15 @@ inline void tiny_average_unpooling_kernel(
 // back_propagation
 inline void tiny_average_unpooling_back_kernel(
   bool parallelize,
-  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad,
+  const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+  const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad,
   const shape3d &in_dim,
   float_t scale_factor,
-  etl::vector<typename partial_connected_layer::io_connections, MAX_TENSOR_SIZE> &weight2io,
-  etl::vector<typename partial_connected_layer::wo_connections, MAX_TENSOR_SIZE> &in2wo,
-  etl::vector<etl::vector<size_t, MAX_TENSOR_SIZE>, MAX_TENSOR_SIZE> &bias2out) {
+  etl::vector<typename partial_connected_layer::io_connections, MAX_CHANNEL_SIZE> &weight2io,
+  etl::vector<typename partial_connected_layer::wo_connections, MAX_CHANNEL_SIZE> &in2wo,
+  etl::vector<etl::vector<size_t, MAX_CHANNEL_SIZE>, MAX_CHANNEL_SIZE> &bias2out) {
   CNN_UNREFERENCED_PARAMETER(out_data);
   CNN_UNREFERENCED_PARAMETER(scale_factor);
   for_i(parallelize, in_data[0]->size(), [&](size_t sample) {
@@ -96,7 +96,7 @@ inline void tiny_average_unpooling_back_kernel(
     }
 
     for (size_t i = 0; i < bias2out.size(); i++) {
-      const etl::vector<size_t, MAX_TENSOR_SIZE> &outs = bias2out[i];
+      const etl::vector<size_t, MAX_CHANNEL_SIZE> &outs = bias2out[i];
       float_t diff{0};
 
       for (auto o : outs) diff += curr_delta[o];
@@ -163,24 +163,24 @@ class average_unpooling_layer : public partial_connected_layer {
     init_connection(pooling_size);
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> in_shape() const override {
     return {in_, w_, index3d<size_t>(1, 1, out_.depth_)};
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override { return {out_}; }
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> out_shape() const override { return {out_}; }
 
   std::string layer_type() const override { return "ave-unpool"; }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     tiny_average_unpooling_kernel(parallelize_, in_data, out_data, out_,
                                   Base::scale_factor_, Base::out2wi_);
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     tiny_average_unpooling_back_kernel(
       parallelize_, in_data, out_data, out_grad, in_grad, in_,
       Base::scale_factor_, Base::weight2io_, Base::in2wo_, Base::bias2out_);

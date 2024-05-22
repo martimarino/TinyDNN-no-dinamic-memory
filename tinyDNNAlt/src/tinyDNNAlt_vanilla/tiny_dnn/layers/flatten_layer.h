@@ -30,11 +30,11 @@ class flatten_layer : public layer {
 
   std::string layer_type() const override { return "flatten"; }
 
-  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override { return {index3d<size_t>(w_, h_, ch_)}; }
-  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override { return {index3d<size_t>(w_*h_*ch_,1,1)}; }
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> in_shape() const override { return {index3d<size_t>(w_, h_, ch_)}; }
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> out_shape() const override { return {index3d<size_t>(w_*h_*ch_,1,1)}; }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
       const size_t num_samples = (*out_data[0]).size();
       for_i(num_samples, [&](size_t s) {
           float_t *outs = &(*out_data[0])[s][0];
@@ -43,10 +43,10 @@ class flatten_layer : public layer {
       });
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
   	    const size_t num_samples = (*out_data[0]).size();
 		for(int i = 0; i < num_samples; ++i ) {
       		tiny_dnn::float_t *ins = &(*in_data[0])[i][0];

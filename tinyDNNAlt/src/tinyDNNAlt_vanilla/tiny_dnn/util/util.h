@@ -144,7 +144,7 @@ typedef size_t label_t;
 typedef size_t layer_size_t;  // for backward compatibility
 
 typedef etl::vector<float_t, MAX_TENSOR_SIZE> vec_t;
-typedef etl::vector<vec_t, MAX_TENSOR_SIZE> tensor_t;
+typedef etl::vector<vec_t, MAX_CHANNEL_SIZE> tensor_t;
 
 template <typename T>
 using xtensor_t = xt::xexpression<T>;
@@ -325,7 +325,7 @@ void CNN_LOG_VECTOR(const vec_t& vec, const std::string& name) {
 */
 
 template <typename T, typename Pred, typename Sum>
-size_t sumif(const etl::vector<T, MAX_INPUT_SIZE> &vec, Pred p, Sum s) {
+size_t sumif(const etl::vector<T, MAX_CHANNEL_SIZE> &vec, Pred p, Sum s) {
   size_t sum = 0;
   for (size_t i = 0; i < vec.size(); i++) {
     if (p(i)) sum += s(vec[i]);
@@ -334,8 +334,8 @@ size_t sumif(const etl::vector<T, MAX_INPUT_SIZE> &vec, Pred p, Sum s) {
 }
 
 template <typename T, typename Pred>
-etl::vector<T, MAX_TENSOR_SIZE> filter(const etl::vector<T, MAX_TENSOR_SIZE> &vec, Pred p, size_t size) {
-  etl::vector<T, MAX_TENSOR_SIZE> res;
+etl::vector<T, MAX_CHANNEL_SIZE> filter(const etl::vector<T, MAX_CHANNEL_SIZE> &vec, Pred p, size_t size) {
+  etl::vector<T, MAX_CHANNEL_SIZE> res;
   for (size_t i = 0; i < size; i++) {
     if (p(i)) res.push_back(vec[i]);
   }
@@ -343,8 +343,8 @@ etl::vector<T, MAX_TENSOR_SIZE> filter(const etl::vector<T, MAX_TENSOR_SIZE> &ve
 }
 
 template <typename Result, typename T, typename Pred>
-etl::vector<Result, MAX_TENSOR_SIZE> map_(const etl::vector<T, MAX_TENSOR_SIZE> &vec, Pred p) {
-  etl::vector<Result, MAX_TENSOR_SIZE> res(vec.size());
+etl::vector<Result, MAX_CHANNEL_SIZE> map_(const etl::vector<T, MAX_CHANNEL_SIZE> &vec, Pred p) {
+  etl::vector<Result, MAX_CHANNEL_SIZE> res(vec.size());
   for (size_t i = 0; i < vec.size(); ++i) {
     res[i] = p(vec[i]);
   }
@@ -387,7 +387,7 @@ inline bool is_trainable_weight(vector_type vtype) {
   return (vtype & vector_type::weight) == vector_type::weight;
 }
 
-inline etl::vector<vector_type, MAX_TENSOR_SIZE> std_input_order(bool has_bias) {
+inline etl::vector<vector_type, MAX_CHANNEL_SIZE> std_input_order(bool has_bias) {
   if (has_bias) {
     return {vector_type::data, vector_type::weight, vector_type::bias};
   } else {

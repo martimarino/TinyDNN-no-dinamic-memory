@@ -94,13 +94,13 @@ class tiny_backend : public backend {
   // core math functions
 
   // quantized convolution
-  void conv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
-                etl::vector<tensor_t *, MAX_INPUT_SIZE> &out_data) override {
+  void conv2d_q(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     copy_and_pad_input(*in_data[0]);
     const vec_t &W    = (*in_data[1])[0];
     const vec_t &bias = (*in_data[2])[0];
     tensor_t &out     = *out_data[0];
-    const etl::vector<const vec_t *, MAX_TENSOR_SIZE> &in =
+    const etl::vector<const vec_t *, MAX_CHANNEL_SIZE> &in =
       (*conv_layer_worker_storage_).prev_out_padded_;  // input // NOLINT
 
     fill_tensor(out, float_t{0});
@@ -112,8 +112,8 @@ class tiny_backend : public backend {
   }
 
   // efficient quantization without abundant quantization/dequantization
-  void conv2d_eq(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                 etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void conv2d_eq(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                 etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     copy_and_pad_input(*in_data[0]);
     const vec_t &W       = (*in_data[1])[0];
     const vec_t &bias    = (*in_data[2])[0];
@@ -123,7 +123,7 @@ class tiny_backend : public backend {
     tensor_t &out        = *out_data[0];
     tensor_t &out_r      = *out_data[1];
 
-    const etl::vector<const vec_t *, MAX_TENSOR_SIZE> &in =
+    const etl::vector<const vec_t *, MAX_CHANNEL_SIZE> &in =
       (*conv_layer_worker_storage_).prev_out_padded_;  // input // NOLINT
 
     fill_tensor(out, float_t{0});
@@ -134,13 +134,13 @@ class tiny_backend : public backend {
     }
   }
 
-  void conv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
-                const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void conv2d_q(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     conv_layer_worker_specific_storage &cws = (*conv_layer_worker_storage_);
 
-    etl::vector<const vec_t *, MAX_TENSOR_SIZE> &prev_out = cws.prev_out_padded_;
+    etl::vector<const vec_t *, MAX_CHANNEL_SIZE> &prev_out = cws.prev_out_padded_;
     const vec_t &W                       = (*in_data[1])[0];
     tensor_t &dW                         = *in_grad[1];
     tensor_t &db                         = *in_grad[2];
@@ -168,8 +168,8 @@ class tiny_backend : public backend {
     }
   }
 
-  void deconv2d(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
-                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void deconv2d(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     (*deconv_layer_worker_storage_).prev_out_ = in_data[0];
     const vec_t &W                            = (*in_data[1])[0];
     const vec_t &bias                         = (*in_data[2])[0];
@@ -188,8 +188,8 @@ class tiny_backend : public backend {
   }
 
   // quantized deconvolution
-  void deconv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
-                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void deconv2d_q(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     (*deconv_layer_worker_storage_).prev_out_ = in_data[0];
     const tensor_t &in                        = *in_data[0];  // input
     const vec_t &W                            = (*in_data[1])[0];
@@ -210,8 +210,8 @@ class tiny_backend : public backend {
   }
 
   // efficient quantization without abundant quantization/dequantization
-  void deconv2d_eq(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                   etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void deconv2d_eq(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                   etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     (*deconv_layer_worker_storage_).prev_out_ = in_data[0];
     const tensor_t &in                        = *in_data[0];  // input
     const vec_t &W                            = (*in_data[1])[0];
@@ -236,10 +236,10 @@ class tiny_backend : public backend {
     out = *(*deconv_layer_worker_storage_).curr_out_unpadded_;
   }
 
-  void deconv2d(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
-                const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void deconv2d(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     deconv_layer_worker_specific_storage &cws = (*deconv_layer_worker_storage_);
     if (params_d_->pad_type == padding::same)
       copy_and_pad_delta(cws.curr_delta_padded, *in_grad[0]);
@@ -265,10 +265,10 @@ class tiny_backend : public backend {
                                        curr_delta, prev_delta);
   }
 
-  void deconv2d_q(const etl::vector<tensor_t *, MAX_INPUT_SIZE> &in_data,
-                  const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                  etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void deconv2d_q(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                  const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                  etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     deconv_layer_worker_specific_storage &cws = (*deconv_layer_worker_storage_);
     if (params_d_->pad_type == padding::same)
       copy_and_pad_delta(cws.curr_delta_padded, *in_grad[0]);
@@ -297,8 +297,8 @@ class tiny_backend : public backend {
     }
   }
 
-  void fully_q(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void fully_q(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+               etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
 #ifdef CNN_USE_GEMMLOWP
     const tensor_t &in = *in_data[0];
     const vec_t &W     = (*in_data[1])[0];
@@ -318,8 +318,8 @@ class tiny_backend : public backend {
 #endif
   }
 
-  void fully_eq(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void fully_eq(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
 #ifdef CNN_USE_GEMMLOWP
     const tensor_t &in   = *in_data[0];
     const vec_t &W       = (*in_data[1])[0];
@@ -344,10 +344,10 @@ class tiny_backend : public backend {
 #endif
   }
 
-  void fully_q(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-               const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-               etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void fully_q(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+               const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+               etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+               etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
 #ifdef CNN_USE_GEMMLOWP
     const tensor_t &prev_out = *in_data[0];
     const vec_t &W           = (*in_data[1])[0];

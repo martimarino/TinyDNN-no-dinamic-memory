@@ -100,8 +100,8 @@ class graph_visualizer {
   }
 
   void generate_layer_channels(std::ostream &stream,
-                               const etl::vector<shape3d, MAX_TENSOR_SIZE> &shapes,
-                               const etl::vector<vector_type, MAX_TENSOR_SIZE> &vtypes,
+                               const etl::vector<shape3d, MAX_CHANNEL_SIZE> &shapes,
+                               const etl::vector<vector_type, MAX_CHANNEL_SIZE> &vtypes,
                                const std::string &port_prefix) {
     CNN_UNREFERENCED_PARAMETER(vtypes);
     for (size_t i = 0; i < shapes.size(); i++) {

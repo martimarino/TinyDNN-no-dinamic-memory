@@ -32,8 +32,8 @@ class concat_layer : public layer {
   /**
    * @param in_shapes [in] shapes of input tensors
    */
-  explicit concat_layer(const etl::vector<shape3d, MAX_INPUT_SIZE> &in_shapes)
-    : layer(etl::vector<vector_type, MAX_INPUT_SIZE>(in_shapes.size(), vector_type::data),
+  explicit concat_layer(const etl::vector<shape3d, MAX_CHANNEL_SIZE> &in_shapes)
+    : layer(etl::vector<vector_type, MAX_CHANNEL_SIZE>(in_shapes.size(), vector_type::data),
             {vector_type::data}),
       in_shapes_(in_shapes) {
     set_outshape();
@@ -44,9 +44,9 @@ class concat_layer : public layer {
    * @param ndim     [in] number of elements for each input
    */
   concat_layer(size_t num_args, size_t ndim)
-    : layer(etl::vector<vector_type, MAX_INPUT_SIZE>(num_args, vector_type::data),
+    : layer(etl::vector<vector_type, MAX_CHANNEL_SIZE>(num_args, vector_type::data),
             {vector_type::data}),
-      in_shapes_(etl::vector<shape3d, MAX_INPUT_SIZE>(num_args, shape3d(ndim, 1, 1))) {
+      in_shapes_(etl::vector<shape3d, MAX_CHANNEL_SIZE>(num_args, shape3d(ndim, 1, 1))) {
     set_outshape();
   }
 
@@ -61,12 +61,12 @@ class concat_layer : public layer {
 
   std::string layer_type() const override { return "concat"; }
 
-  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shape() const override { return in_shapes_; }
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> in_shape() const override { return in_shapes_; }
 
-  etl::vector<shape3d, MAX_TENSOR_SIZE> out_shape() const override { return {out_shape_}; }
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> out_shape() const override { return {out_shape_}; }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     const size_t num_samples = (*out_data[0]).size();
 
     for_i(num_samples, [&](size_t s) {
@@ -80,10 +80,10 @@ class concat_layer : public layer {
     });
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     CNN_UNREFERENCED_PARAMETER(in_data);
     CNN_UNREFERENCED_PARAMETER(out_data);
 
@@ -104,7 +104,7 @@ class concat_layer : public layer {
   friend struct serialization_buddy;
 
  private:
-  etl::vector<shape3d, MAX_TENSOR_SIZE> in_shapes_;
+  etl::vector<shape3d, MAX_CHANNEL_SIZE> in_shapes_;
   shape3d out_shape_;
 };
 

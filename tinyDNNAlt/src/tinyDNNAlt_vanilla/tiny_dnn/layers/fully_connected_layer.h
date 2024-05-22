@@ -52,7 +52,7 @@ class fully_connected_layer : public layer {
 
   size_t fan_out_size() const override { return params_.out_size_; }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> in_shape() const override {
     if (params_.has_bias_) {
       return {index3d<size_t>(params_.in_size_, 1, 1),
               index3d<size_t>(params_.in_size_, params_.out_size_, 1),
@@ -63,12 +63,12 @@ class fully_connected_layer : public layer {
     }
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> out_shape() const override {
     return {index3d<size_t>(params_.out_size_, 1, 1)};
   }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     // forward fully connected op context
     fwd_ctx_.set_in_out(in_data, out_data);
     fwd_ctx_.setParallelize(layer::parallelize());
@@ -78,10 +78,10 @@ class fully_connected_layer : public layer {
     kernel_fwd_->compute(fwd_ctx_);
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     // backward fully connected op context
     bwd_ctx_.set_in_out(in_data, out_data, out_grad, in_grad);
     bwd_ctx_.setParallelize(layer::parallelize());

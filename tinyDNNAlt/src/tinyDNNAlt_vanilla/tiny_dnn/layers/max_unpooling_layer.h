@@ -79,8 +79,8 @@ class max_unpooling_layer : public layer {
 
   size_t fan_out_size() const override { return in2out_[0].size(); }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                             etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                             etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     const tensor_t &in = *in_data[0];
     tensor_t &out      = *out_data[0];
 
@@ -97,10 +97,10 @@ class max_unpooling_layer : public layer {
     }
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                          const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                          etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                          const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                          etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                          etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     CNN_UNREFERENCED_PARAMETER(out_data);
     tensor_t &prev_delta = *in_grad[0];
     tensor_t &curr_delta = *out_grad[0];
@@ -121,8 +121,8 @@ class max_unpooling_layer : public layer {
     }
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override { return {in_}; }
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override { return {out_}; }
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> in_shape() const override { return {in_}; }
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> out_shape() const override { return {out_}; }
   std::string layer_type() const override { return "max-unpool"; }
   size_t unpool_size() const { return unpool_size_; }
 

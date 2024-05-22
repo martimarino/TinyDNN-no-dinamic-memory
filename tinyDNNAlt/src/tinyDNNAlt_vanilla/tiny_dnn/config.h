@@ -16,7 +16,7 @@
 #undef CNN_USE_AVX2
 #undef CNN_USE_SSE
 
-#include "interface/cereal/posit.h"
+// #include "interface/cereal/posit.h"
 #endif
 #define CNN_SINGLE_THREAD
 

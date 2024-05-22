@@ -79,18 +79,18 @@ class batch_normalization_layer : public layer {
   ///< number of outgoing connections for each input unit
   size_t fan_out_size() const override { return 1; }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> in_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> in_shape() const override {
     return {index3d<size_t>(in_spatial_size_, 1, in_channels_)};
   }
 
-  etl::vector<index3d<size_t>, MAX_TENSOR_SIZE> out_shape() const override {
+  etl::vector<index3d<size_t>, MAX_CHANNEL_SIZE> out_shape() const override {
     return {index3d<size_t>(in_spatial_size_, 1, in_channels_)};
   }
 
-  void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                        const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                        etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) override {
+  void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                        const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                        etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) override {
     tensor_t &prev_delta     = *in_grad[0];
     tensor_t &curr_delta     = *out_grad[0];
     const tensor_t &curr_out = *out_data[0];
@@ -130,8 +130,8 @@ class batch_normalization_layer : public layer {
     });
   }
 
-  void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                           etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) override {
+  void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                           etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) override {
     vec_t &mean = (phase_ == net_phase::train) ? mean_current_ : mean_;
     vec_t &variance =
       (phase_ == net_phase::train) ? variance_current_ : variance_;

@@ -173,23 +173,23 @@ namespace tiny_dnn {
         void bprop(const etl::vector<vec_t, MAX_TENSOR_SIZE> &out,
                    const etl::vector<vec_t, MAX_TENSOR_SIZE> &t,
                    const etl::vector<vec_t, MAX_TENSOR_SIZE> &t_cost) {
-            bprop<E>(etl::vector<tensor_t,MAX_OUTPUT_SIZE>{out},
-            		etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t},
-                     etl::vector<tensor_t, MAX_OUTPUT_SIZE>{t_cost});
+            /*bprop<E>(etl::vector<tensor_t,1>{out},
+            		etl::vector<tensor_t, 1>{t},
+                     etl::vector<tensor_t, 1>{t_cost});*/
         }
 
         template <typename E>
-        void bprop(const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &out,
-                   const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t,
-                   const etl::vector<tensor_t, MAX_OUTPUT_SIZE> &t_cost) {
-            etl::vector<tensor_t, MAX_TENSOR_SIZE> delta = gradient<E>(out, t, t_cost);
-            net_.backward(delta);
+        void bprop(const etl::vector<tensor_t, 1> &out,
+                   const etl::vector<tensor_t, 1> &t,
+                   const etl::vector<tensor_t, 1> &t_cost) {
+           /* etl::vector<tensor_t, 1> delta = gradient<E>(out, t, t_cost);
+            net_.backward(delta);*/
         }
 
         vec_t fprop(const vec_t &in) {
             if (in.size() != (size_t)in_data_size()) data_mismatch(**net_.begin(), in);
 #if 0
-            return fprop(etl::vector<vec_t, MAX_INPUT_SIZE>{ in })[0];
+            return fprop(etl::vector<vec_t, MAX_CHANNEL_SIZE>{ in })[0];
 #else
             // a workaround to reduce memory consumption by skipping wrapper
             // function
@@ -200,11 +200,11 @@ namespace tiny_dnn {
         }
 
         // convenience wrapper for the function below
-        etl::vector<vec_t, MAX_TENSOR_SIZE> fprop(const etl::vector<vec_t, MAX_INPUT_SIZE> &in) {
-            return fprop(etl::vector<tensor_t, MAX_TENSOR_SIZE>{in})[0];
+        etl::vector<vec_t, MAX_TENSOR_SIZE> fprop(const etl::vector<vec_t, MAX_TENSOR_SIZE> &in) {
+            return fprop(etl::vector<tensor_t, 1>{in})[0];
         }
 
-        etl::vector<tensor_t, MAX_TENSOR_SIZE> fprop(const etl::vector<tensor_t, 1> &in) {
+        etl::vector<tensor_t, 1> fprop(const etl::vector<tensor_t, 1> &in) {
             return net_.forward(in);
         }
 
@@ -225,12 +225,12 @@ namespace tiny_dnn {
         /**
          * executes forward-propagation and returns output
          **/
-        tensor_t predict(const tensor_t &in) { return fprop(in); }
+        // tensor_t predict(const tensor_t &in) { return fprop(in); }
 
         /**
          * executes forward-propagation and returns output
          **/
-        etl::vector<tensor_t, MAX_INPUT_SIZE> predict(const etl::vector<tensor_t, MAX_INPUT_SIZE> &in) {
+        etl::vector<tensor_t, MAX_CHANNEL_SIZE> predict(const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &in) {
             return fprop(in);
         }
 
@@ -302,7 +302,7 @@ namespace tiny_dnn {
             if (inputs.size() < batch_size || class_labels.size() < batch_size) {
                 return false;
             }
-            etl::vector<tensor_t, MAX_TENSOR_SIZE> input_tensor, output_tensor, t_cost_tensor;
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> input_tensor, output_tensor, t_cost_tensor;
             normalize_tensor(inputs, input_tensor);
             normalize_tensor(class_labels, output_tensor);
             if (!t_cost.empty()) normalize_tensor(t_cost, t_cost_tensor);
@@ -380,9 +380,9 @@ namespace tiny_dnn {
                  const bool reset_weights     = false,
                  const int n_threads          = CNN_TASK_SIZE,
                  const etl::vector<U, MAX_TENSOR_SIZE> &t_cost = etl::vector<U,MAX_TENSOR_SIZE>()) {
-            etl::vector<tensor_t, MAX_INPUT_SIZE> input_tensor;
-            etl::vector<tensor_t, MAX_OUTPUT_SIZE> output_tensor;
-            etl::vector<tensor_t, MAX_TENSOR_SIZE> t_cost_tensor;
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> input_tensor;
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> output_tensor;
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> t_cost_tensor;
             normalize_tensor(inputs, input_tensor);
             normalize_tensor(desired_outputs, output_tensor);
             if (!t_cost.empty()) normalize_tensor(t_cost, t_cost_tensor);
@@ -495,7 +495,7 @@ namespace tiny_dnn {
                          const etl::vector<label_t, MAX_INPUT_SIZE> &t) {
             float_t sum_loss = float_t(0);
 
-            etl::vector<tensor_t, MAX_INPUT_SIZE> label_tensor;
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> label_tensor;
             normalize_tensor(t, label_tensor);
 
             for (size_t i = 0; i < in.size(); i++) {
@@ -525,9 +525,9 @@ namespace tiny_dnn {
          * calculate loss value (the smaller, the better) for regression task
          **/
         template <typename E, typename T>
-        float_t get_loss(const etl::vector<T, MAX_INPUT_SIZE> &in, const etl::vector<tensor_t, MAX_INPUT_SIZE> &t) {
+        float_t get_loss(const etl::vector<T, MAX_INPUT_SIZE> &in, const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &t) {
             float_t sum_loss = float_t(0);
-            etl::vector<tensor_t, MAX_INPUT_SIZE> in_tensor;
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> in_tensor;
             normalize_tensor(in, in_tensor);
 
             for (size_t i = 0; i < in.size(); i++) {
@@ -545,13 +545,13 @@ namespace tiny_dnn {
          * http://ufldl.stanford.edu/wiki/index.php/Gradient_checking_and_advanced_optimization
          **/
         template <typename E>
-        bool gradient_check(const etl::vector<tensor_t, MAX_INPUT_SIZE> &in,
-                            const etl::vector<etl::vector<label_t, MAX_TENSOR_SIZE>, MAX_INPUT_SIZE> &t,
+        bool gradient_check(const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &in,
+                            const etl::vector<etl::vector<label_t, MAX_TENSOR_SIZE>, MAX_CHANNEL_SIZE> &t,
                             float_t eps,
                             grad_check_mode mode) {
             assert(in.size() == t.size());
 
-            etl::vector<tensor_t, MAX_INPUT_SIZE> v(t.size());
+            etl::vector<tensor_t, MAX_CHANNEL_SIZE> v(t.size());
             const size_t sample_count = t.size();
             for (size_t sample = 0; sample < sample_count; ++sample) {
                 net_.label2vec(t[sample], v[sample]);
@@ -562,7 +562,7 @@ namespace tiny_dnn {
                     continue;
                 }
                 etl::vector<vec_t *, MAX_TENSOR_SIZE> weights  = current->weights();
-                etl::vector<tensor_t *, MAX_TENSOR_SIZE> grads = current->weights_grads();
+                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> grads = current->weights_grads();
 
                 if (weights.empty() || (*weights[0]).empty()) continue;
                 assert(weights.size() == grads.size());
@@ -847,15 +847,15 @@ namespace tiny_dnn {
                 typename OnBatchEnumerate,
                 typename OnEpochEnumerate>
         bool fit(Optimizer &optimizer,
-                 const etl::vector<tensor_t, MAX_INPUT_SIZE> &inputs,
-                 const etl::vector<tensor_t, MAX_INPUT_SIZE> &desired_outputs,
+                 const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &inputs,
+                 const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &desired_outputs,
                  size_t batch_size,
                  int epoch,
                  OnBatchEnumerate on_batch_enumerate,
                  OnEpochEnumerate on_epoch_enumerate,
                  const bool reset_weights            = false,
                  const int n_threads                 = CNN_TASK_SIZE,
-                 const etl::vector<tensor_t, MAX_TENSOR_SIZE> &t_cost = etl::vector<tensor_t, MAX_TENSOR_SIZE>()) {
+                 const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &t_cost = etl::vector<tensor_t, MAX_TENSOR_SIZE>()) {
             // check_training_data(in, t);
             check_target_cost_matrix(desired_outputs, t_cost);
             set_netphase(net_phase::train);
@@ -926,9 +926,9 @@ namespace tiny_dnn {
             CNN_UNREFERENCED_PARAMETER(num_tasks);
             std::copy(&in[0], &in[0] + batch_size, &in_batch_[0]);
             std::copy(&t[0], &t[0] + batch_size, &t_batch_[0]);
-            etl::vector<tensor_t, MAX_TENSOR_SIZE> t_cost_batch =
-                    t_cost ? etl::vector<tensor_t, MAX_TENSOR_SIZE>(&t_cost[0], &t_cost[0] + batch_size)
-                           : etl::vector<tensor_t, MAX_TENSOR_SIZE>();
+            etl::vector<tensor_t, 1> t_cost_batch =
+                    t_cost ? etl::vector<tensor_t, 1>(&t_cost[0], &t_cost[0] + batch_size)
+                           : etl::vector<tensor_t, 1>();
 
             bprop<E>(fprop(in_batch_), t_batch_, t_cost_batch);
             net_.update_weights(&optimizer);
@@ -941,8 +941,8 @@ namespace tiny_dnn {
         //    }
 
         template <typename E>
-        bool calc_delta(const etl::vector<tensor_t, MAX_INPUT_SIZE> &in,
-                        const etl::vector<tensor_t, MAX_INPUT_SIZE> &v,
+        bool calc_delta(const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &in,
+                        const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &v,
                         vec_t &w,
                         tensor_t &dw,
                         size_t check_index,
@@ -984,7 +984,7 @@ namespace tiny_dnn {
             w[check_index]             = prev_w;
 
             // calculate dw/dE by bprop
-            bprop<E>(fprop(in), v, etl::vector<tensor_t, MAX_TENSOR_SIZE>());
+            bprop<E>(fprop(in), v, etl::vector<tensor_t, MAX_CHANNEL_SIZE>());
 
             float_t delta_by_bprop = 0;
             for (size_t sample = 0; sample < sample_count; ++sample) {
@@ -1042,8 +1042,8 @@ namespace tiny_dnn {
             }
         }
 
-        void check_target_cost_matrix(const etl::vector<tensor_t, MAX_INPUT_SIZE> &t,
-                                      const etl::vector<tensor_t, MAX_TENSOR_SIZE> &t_cost) {
+        void check_target_cost_matrix(const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &t,
+                                      const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &t_cost) {
             if (!t_cost.empty()) {
                 if (t.size() != t_cost.size()) {
                     throw nn_error(
@@ -1077,7 +1077,7 @@ namespace tiny_dnn {
         }
 
         const tensor_t *get_target_cost_sample_pointer(
-                const etl::vector<tensor_t, MAX_TENSOR_SIZE> &t_cost, size_t i) {
+                const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &t_cost, size_t i) {
             if (!t_cost.empty()) {
                 assert(i < t_cost.size());
                 return &(t_cost[i]);
@@ -1086,20 +1086,20 @@ namespace tiny_dnn {
             }
         }
 
-        void normalize_tensor(const etl::vector<tensor_t, MAX_TENSOR_SIZE> &inputs,
-                              etl::vector<tensor_t, MAX_TENSOR_SIZE> &normalized) {
+        void normalize_tensor(const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &inputs,
+                              etl::vector<tensor_t, MAX_CHANNEL_SIZE> &normalized) {
             normalized = inputs;
         }
 
         void normalize_tensor(const etl::vector<vec_t, MAX_TENSOR_SIZE> &inputs,
-                              etl::vector<tensor_t, MAX_TENSOR_SIZE> &normalized) {
+                              etl::vector<tensor_t, MAX_CHANNEL_SIZE> &normalized) {
             normalized.reserve(inputs.size());
             for (size_t i = 0; i < inputs.size(); i++)
                 normalized.emplace_back(tensor_t{inputs[i]});
         }
 
         void normalize_tensor(const etl::vector<label_t, MAX_TENSOR_SIZE> &inputs,
-                              etl::vector<tensor_t, MAX_TENSOR_SIZE> &normalized) {
+                              etl::vector<tensor_t, MAX_CHANNEL_SIZE> &normalized) {
             etl::vector<vec_t, MAX_TENSOR_SIZE> vec;
             normalized.reserve(inputs.size());
             net_.label2vec(inputs, vec);
@@ -1108,8 +1108,8 @@ namespace tiny_dnn {
 
         std::string name_;
         bool stop_training_;
-        etl::vector<tensor_t, MAX_BATCH_SIZE> in_batch_;
-        etl::vector<tensor_t, MAX_TENSOR_SIZE> t_batch_;
+        etl::vector<tensor_t, 1> in_batch_;
+        etl::vector<tensor_t, 1> t_batch_;
     };
 
 /**

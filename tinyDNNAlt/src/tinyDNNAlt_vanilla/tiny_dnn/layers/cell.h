@@ -19,17 +19,17 @@ class cell : public layer {
  public:
   cell() : layer({}, {}) {}
 
-  virtual etl::vector<vector_type, MAX_TENSOR_SIZE> input_order() = 0;
+  virtual etl::vector<vector_type, MAX_CHANNEL_SIZE> input_order() = 0;
 
-  virtual etl::vector<vector_type, MAX_TENSOR_SIZE> output_order() = 0;
+  virtual etl::vector<vector_type, MAX_CHANNEL_SIZE> output_order() = 0;
 
-  virtual void forward_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                                   etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data) = 0;
+  virtual void forward_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                                   etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data) = 0;
 
-  virtual void back_propagation(const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_data,
-                                const etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_data,
-                                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &out_grad,
-                                etl::vector<tensor_t *, MAX_TENSOR_SIZE> &in_grad) = 0;
+  virtual void back_propagation(const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_data,
+                                const etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_data,
+                                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &out_grad,
+                                etl::vector<tensor_t *, MAX_CHANNEL_SIZE> &in_grad) = 0;
 
 
   virtual core::backend_t backend_type() const { return wrapper_->engine(); }
