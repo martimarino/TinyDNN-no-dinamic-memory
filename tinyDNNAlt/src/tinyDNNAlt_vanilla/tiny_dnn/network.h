@@ -200,7 +200,7 @@ namespace tiny_dnn {
         }
 
         // convenience wrapper for the function below
-        etl::vector<vec_t, MAX_TENSOR_SIZE> fprop(const etl::vector<vec_t, MAX_TENSOR_SIZE> &in) {
+        etl::vector<vec_t, MAX_CHANNEL_SIZE> fprop(const etl::vector<vec_t, MAX_CHANNEL_SIZE> &in) {
             return fprop(etl::vector<tensor_t, 1>{in})[0];
         }
 
@@ -225,7 +225,7 @@ namespace tiny_dnn {
         /**
          * executes forward-propagation and returns output
          **/
-        // tensor_t predict(const tensor_t &in) { return fprop(in); }
+        tensor_t predict(const tensor_t &in) { return fprop(in); }
 
         /**
          * executes forward-propagation and returns output

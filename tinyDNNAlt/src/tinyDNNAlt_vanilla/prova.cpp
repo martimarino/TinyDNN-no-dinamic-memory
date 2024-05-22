@@ -9,13 +9,14 @@ using namespace tiny_dnn;
 using namespace tiny_dnn::activation;
 using namespace tiny_dnn::layers;
 
-#define IMG_SIZE 5
+#define IMG_SIZE 2
 
 tensor_t test_image() {
     
     const size_t rows = 1;
     const size_t cols = IMG_SIZE*IMG_SIZE;
 
+    // etl::vector<vec_t, 1> image;
     tensor_t image(rows, vec_t(cols));
 
     for (size_t i = 0; i < cols; ++i) {
@@ -44,9 +45,12 @@ tensor_t construct_mlp(const tensor_t &input) {
     }
 
     // Propaga l'immagine di input attraverso la rete
-    etl::vector<tensor_t, 1> v;
-    v[0] = input;
-    return net.predict(input);
+    // etl::vector<tensor_t, 1> v;
+    // v[0] = input;
+
+    const etl::vector<tensor_t, MAX_CHANNEL_SIZE> in;
+    tensor_t t;
+    return net.predict(t);
 }
 
 int main() {
