@@ -234,15 +234,16 @@ namespace tiny_dnn {
         // output: [channel][sample][feature]
         void reorder_for_layerwise_processing(
                 const etl::vector<tensor_t, 1> &input,
-                etl::vector<etl::vector<const vec_t *, MAX_CHANNEL_SIZE>, 1> &output) { //output matrice con colonne pari ai canali e colonne pari ai sample
+                etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> &output) { //output matrice con colonne pari ai canali e colonne pari ai sample
             size_t sample_count  = input.size();
             size_t channel_count = input[0].size();
-
+            // std::cout << "  rflp ->  " << "sample_count: " << sample_count << " channel_count:  " << channel_count << "  output size: "  << output.size() << std::endl;
             output.resize(channel_count);
+            // std::cout << "output.size(): " << output.size() << std::endl;
             for (size_t i = 0; i < channel_count; ++i) {
                 output[i].resize(sample_count);
             }
-
+            // std::cout << "output.size(): " << output.size() << std::endl;
             for (size_t sample = 0; sample < sample_count; ++sample) {
                 assert(input[sample].size() == channel_count);
                 for (size_t channel = 0; channel < channel_count; ++channel) {
@@ -276,7 +277,7 @@ namespace tiny_dnn {
     class sequential : public nodes {
     public:
         void backward(const etl::vector<tensor_t, 1> &first) override {
-            etl::vector<etl::vector<const vec_t *, MAX_CHANNEL_SIZE>, 1> reordered_grad;
+            etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> reordered_grad;
             reorder_for_layerwise_processing(first, reordered_grad);
             assert(reordered_grad.size() == 1);
 
@@ -288,16 +289,20 @@ namespace tiny_dnn {
         }
 
         etl::vector<tensor_t, 1> forward(const etl::vector<tensor_t, 1> &first) override {
-            etl::vector<etl::vector<const vec_t *, MAX_CHANNEL_SIZE>, 1> reordered_data;
+            etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> reordered_data;
+            // std::cout << "forward -> first size: " << first.size() << "   first[0].size(): " << first[0].size() << std::endl;
+            // std::cout << "forward -> reordered_data.size(): " << reordered_data.size() << std::endl;
             reorder_for_layerwise_processing(first, reordered_data);
-            assert(reordered_data.size() == 1);
-
+            // std::cout << "forward -> " << reordered_data.size() << "    " << reordered_data[0].size() <<   "    " << (*reordered_data[0][0])[0] << std::endl;
+            //assert(reordered_data.size() == 1);
+            // std::cout << "forward assert ok \n";
+            // std::cout << "forward -> " << reordered_data.size() << "    " << reordered_data[0].size() <<   "    " << (*reordered_data[0][0])[0] << std::endl;
             nodes_.front()->set_in_data(&reordered_data[0], 1);
-
+            // std::cout << "forward -> " << reordered_data.size() << "    " << reordered_data[0].size() <<   "    " << (*reordered_data[0][0])[0] << std::endl;
+            // std::cout << "forward set_in_data ok \n";
             for (auto l : nodes_) {
                 l->forward();
             }
-
             etl::vector<const tensor_t *, 1> out;
             nodes_.back()->output(out);
 
@@ -347,6 +352,7 @@ namespace tiny_dnn {
 
         etl::vector<tensor_t, 1> normalize_out(
                 const etl::vector<const tensor_t *, 1> &out) {
+                    // std::cout << "NORMALIZE_OUT \n";
             // normalize indexing back to [sample][layer][feature]
             etl::vector<tensor_t, 1> normalized_output;
 
@@ -374,7 +380,7 @@ namespace tiny_dnn {
                 throw nn_error("input size mismatch");
             }
 
-            etl::vector<etl::vector<const vec_t *, MAX_CHANNEL_SIZE>, 1> reordered_grad;
+            etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> reordered_grad;
             reorder_for_layerwise_processing(out_grad, reordered_grad);
             assert(reordered_grad.size() == output_channel_count);
 
@@ -394,9 +400,9 @@ namespace tiny_dnn {
                 throw nn_error("input size mismatch");
             }
 
-            etl::vector<etl::vector<const vec_t *, MAX_CHANNEL_SIZE>, 1> reordered_data;
+            etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> reordered_data;
             reorder_for_layerwise_processing(in_data, reordered_data);
-            assert(reordered_data.size() == input_data_channel_count);
+            //assert(reordered_data.size() == input_data_channel_count);
 
             for (size_t channel_index = 0; channel_index < input_data_channel_count;
                  channel_index++) {

@@ -34,6 +34,7 @@ class fully_connected_layer : public layer {
                         bool has_bias                = true,
                         core::backend_t backend_type = core::default_engine())
     : layer(std_input_order(has_bias), {vector_type::data}) {
+      // std::cout << "FC -> in_dim: " << in_dim << "   out_dim: " << out_dim << "  has_bias: " << has_bias << "\n";
     set_params(in_dim, out_dim, has_bias);
     init_backend(backend_type);
     layer::set_backend_type(backend_type);
@@ -100,6 +101,7 @@ class fully_connected_layer : public layer {
     params_.in_size_  = in_size;
     params_.out_size_ = out_size;
     params_.has_bias_ = has_bias;
+    // std::cout << "IN_SIZE: " << in_size << "   OUT_SIZE: " << out_size << "\n";
   }
 
   void init_backend(core::backend_t backend_type) {

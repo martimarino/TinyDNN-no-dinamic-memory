@@ -388,6 +388,7 @@ inline bool is_trainable_weight(vector_type vtype) {
 }
 
 inline etl::vector<vector_type, MAX_CHANNEL_SIZE> std_input_order(bool has_bias) {
+  // std::cout << "STD_INPUT_ORDER -> has_bias: " << has_bias << "\n";
   if (has_bias) {
     return {vector_type::data, vector_type::weight, vector_type::bias};
   } else {

@@ -69,6 +69,7 @@ class layer : public node {
       out_channels_(out_type.size()),
       in_type_(in_type),
       out_type_(out_type) {
+    // std::cout << "COSTRUTT LAYER -> IN_TYPE: " << in_type_.size() << "     OUT_TYPE: " << out_type.size() << "   IN_CHANNELS_: " << in_channels_ << "   OUT_CHANNELS_: " << out_channels_ << std::endl;
     weight_init_ = std::make_shared<weight_init::xavier>();
     bias_init_   = std::make_shared<weight_init::constant>();
     trainable_   = true;
@@ -210,7 +211,7 @@ class layer : public node {
     return nodes;
   }
 
-  void set_out_grads(const etl::vector<const vec_t *, MAX_CHANNEL_SIZE> *grad, size_t cnt) {  /// ! da ricontrollare
+  void set_out_grads(const etl::vector<const vec_t *, 1> *grad, size_t cnt) {  /// ! da ricontrollare
     CNN_UNREFERENCED_PARAMETER(cnt);
     size_t n = 0;
     for (size_t i = 0; i < out_channels_; i++) {
@@ -227,9 +228,10 @@ class layer : public node {
     }
   }
 
-  void set_in_data(const etl::vector<const vec_t *, MAX_CHANNEL_SIZE> *data, size_t cnt) {
+  void set_in_data(const etl::vector<const vec_t *, 1> *data, size_t cnt) {
     CNN_UNREFERENCED_PARAMETER(cnt);
     size_t n = 0;
+    // std::cout<< "SET_IN_DATA -> in_channels_: " << in_channels_ << std::endl;
     for (size_t i = 0; i < in_channels_; i++) {
       if (in_type_[i] != vector_type::data) continue;
       tensor_t &dst_data = *ith_in_node(i)->get_data();
@@ -472,7 +474,7 @@ class layer : public node {
     // resetting the weights.
     setup(false);
 
-    etl::vector<etl::vector<const vec_t *, MAX_CHANNEL_SIZE>, MAX_CHANNEL_SIZE> input2;
+    etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> input2;
     input2.resize(input.size());
     for (size_t i = 0; i < input.size(); ++i) {
       input2[i].resize(input[i].size());
@@ -494,7 +496,7 @@ class layer : public node {
     const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &out_grads) {  // for test
     setup(false);
 
-    etl::vector<etl::vector<const vec_t *, MAX_CHANNEL_SIZE>, MAX_CHANNEL_SIZE> grads2;
+    etl::vector<etl::vector<const vec_t *, 1>, MAX_CHANNEL_SIZE> grads2;
     grads2.resize(out_grads.size());
     for (size_t i = 0; i < out_grads.size(); ++i) {
       grads2[i].resize(out_grads[i].size());

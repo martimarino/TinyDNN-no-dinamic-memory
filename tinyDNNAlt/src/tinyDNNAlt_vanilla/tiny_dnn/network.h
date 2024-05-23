@@ -205,6 +205,7 @@ namespace tiny_dnn {
         }
 
         etl::vector<tensor_t, 1> fprop(const etl::vector<tensor_t, 1> &in) {
+            // std::cout << "FPROP ARG SIZE: " << in.size() << std::endl;
             return net_.forward(in);
         }
 
@@ -379,7 +380,7 @@ namespace tiny_dnn {
                  OnEpochEnumerate on_epoch_enumerate,
                  const bool reset_weights     = false,
                  const int n_threads          = CNN_TASK_SIZE,
-                 const etl::vector<U, MAX_TENSOR_SIZE> &t_cost = etl::vector<U,MAX_TENSOR_SIZE>()) {
+                 const etl::vector<U, MAX_CHANNEL_SIZE> &t_cost = etl::vector<U,MAX_CHANNEL_SIZE>()) {
             etl::vector<tensor_t, MAX_CHANNEL_SIZE> input_tensor;
             etl::vector<tensor_t, MAX_CHANNEL_SIZE> output_tensor;
             etl::vector<tensor_t, MAX_CHANNEL_SIZE> t_cost_tensor;
@@ -855,7 +856,7 @@ namespace tiny_dnn {
                  OnEpochEnumerate on_epoch_enumerate,
                  const bool reset_weights            = false,
                  const int n_threads                 = CNN_TASK_SIZE,
-                 const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &t_cost = etl::vector<tensor_t, MAX_TENSOR_SIZE>()) {
+                 const etl::vector<tensor_t, MAX_CHANNEL_SIZE> &t_cost = etl::vector<tensor_t, MAX_CHANNEL_SIZE>()) {
             // check_training_data(in, t);
             check_target_cost_matrix(desired_outputs, t_cost);
             set_netphase(net_phase::train);
@@ -1091,14 +1092,14 @@ namespace tiny_dnn {
             normalized = inputs;
         }
 
-        void normalize_tensor(const etl::vector<vec_t, MAX_TENSOR_SIZE> &inputs,
+        void normalize_tensor(const etl::vector<vec_t, MAX_CHANNEL_SIZE> &inputs,
                               etl::vector<tensor_t, MAX_CHANNEL_SIZE> &normalized) {
             normalized.reserve(inputs.size());
             for (size_t i = 0; i < inputs.size(); i++)
                 normalized.emplace_back(tensor_t{inputs[i]});
         }
 
-        void normalize_tensor(const etl::vector<label_t, MAX_TENSOR_SIZE> &inputs,
+        void normalize_tensor(const etl::vector<label_t, MAX_CHANNEL_SIZE> &inputs,
                               etl::vector<tensor_t, MAX_CHANNEL_SIZE> &normalized) {
             etl::vector<vec_t, MAX_TENSOR_SIZE> vec;
             normalized.reserve(inputs.size());
